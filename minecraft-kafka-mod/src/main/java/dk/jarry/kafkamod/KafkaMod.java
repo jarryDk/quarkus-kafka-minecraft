@@ -113,7 +113,7 @@ public class KafkaMod {
     public void onChat(net.minecraftforge.event.ServerChatEvent event){
 
         ServerPlayer player = event.getPlayer();
-        String message = event.getMessage();
+        String message = event.getMessage().getString();
         String username = event.getUsername();
 
         LOGGER.info("Player : " + player + " - Message : " + message + " - Username : " + username);
