@@ -14,12 +14,12 @@ public class JsonSerializer implements Serializer<JsonNode> {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public JsonSerializer() {
-        //Nothing to do
+        // Nothing to do
     }
 
     @Override
     public void configure(Map<String, ?> config, boolean isKey) {
-        //Nothing to Configure
+        // Nothing to Configure
     }
 
     @Override
@@ -36,6 +36,6 @@ public class JsonSerializer implements Serializer<JsonNode> {
 
     @Override
     public void close() {
-
     }
+
 }

@@ -28,12 +28,6 @@ public class ItemStackRecord {
 
     public KafkaModPlayer getPlayer() {
         return player;
-    }
-
-    public static void main(String[] args) {
-        String reg = "[!^\\[\\]]";
-        String test = "[Dirt]";
-        System.out.println( test.replaceAll(reg, ""));
-    }
+    } 
 
 }
