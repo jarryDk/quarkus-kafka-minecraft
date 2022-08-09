@@ -2,6 +2,8 @@
 
 This project is created to show how to track players movement in Minecraft via Kafka and Quarkus.
 
+image::images/show_player_in_browser.png[]
+
 The Minecraft mod `kafkamod` might be a bit to chatty, but it is nice doing development.
 
 TIP: Start Kafka before starting the Minecraft server.
