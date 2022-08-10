@@ -15,6 +15,10 @@ public class ItemStackRecord {
         this.stack = stack;
     }
 
+    public KafkaModPlayer getPlayer() {
+        return player;
+    }
+
     public String getTypeOfEvent() {
         return typeOfEvent;
     }
@@ -25,9 +29,5 @@ public class ItemStackRecord {
         return component.getString().replaceAll(regex, "");
 
     }
-
-    public KafkaModPlayer getPlayer() {
-        return player;
-    } 
 
 }

@@ -2,31 +2,24 @@ package dk.jarry.kafkamod;
 
 public class ChatRecord {
 
-    String message;
-    String username;
     KafkaModPlayer player;
+    String message;
 
-    public ChatRecord(String message, String username){
+    public ChatRecord(String message, String username) {
         this.message = message;
-        this.username = username;
     }
 
-    public ChatRecord(String message, String username, KafkaModPlayer player){
-        this.message = message;
-        this.username = username;
+    public ChatRecord(KafkaModPlayer player, String message) {
         this.player = player;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public String getUsername() {
-        return username;
+        this.message = message;
     }
 
     public KafkaModPlayer getPlayer() {
         return player;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
 }

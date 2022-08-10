@@ -24,3 +24,6 @@ hs_err_pid*
 .classpath
 .project
 .settings/*
+.vscode/settings.json
+bin/*
+minecraft-kafka-mod/bin/main/pack.mcmeta
