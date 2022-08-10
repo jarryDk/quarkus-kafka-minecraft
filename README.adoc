@@ -192,4 +192,10 @@ bin/kafka-console-consumer.sh \
     --bootstrap-server localhost:9092
 ----
 
+== Links
+
+- https://files.minecraftforge.net/net/minecraftforge/forge/[Downloads for Minecraft Forge]
+- https://docs.minecraftforge.net/en/latest/[MinecraftForge Documentation]
+- https://quarkus.io/guides/kafka-reactive-getting-started[Getting Started to SmallRye Reactive Messaging with Apache Kafka - Quarkus]
+- https://threejs.org
 

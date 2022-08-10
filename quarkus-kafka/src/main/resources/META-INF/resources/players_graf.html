@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<!-- https://github.com/enable3d/enable3d-website/blob/master/src/examples/native-three-with-physics.html -->
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Players with Physics</title>
+    <script src="lib/three.min.js"></script>
+    <script src="lib/enable3d/enable3d.ammoPhysics.0.25.2.min.js"></script>
+    <script src="lib/OrbitControls.js"></script>
+</head>
+
+<body>    
+    <script>
+        const { AmmoPhysics, PhysicsLoader } = ENABLE3D
+
+        const player = [];
+        player.push({ x:50.01078183938167,y:62.30531325613159,z:3.4366749997460855});
+        player.push({ x:66.67874520838761,y:62,z:9.675782539345906});
+
+        // scene
+        const scene = new THREE.Scene()
+        scene.background = new THREE.Color(0xf0f0f0)
+
+        // renderer
+        const renderer = new THREE.WebGLRenderer()
+        renderer.setSize(window.innerWidth, window.innerHeight)
+        document.body.appendChild(renderer.domElement)
+
+        // camera
+        const camera = new THREE.PerspectiveCamera(50,  window.innerWidth / window.innerHeight , 0.1, 2000)
+        camera.position.set(250, 250, 0)
+
+        const MainScene = () => {
+
+            console.log("Running MainScene . . . ");
+
+            // dpr
+            const DPR = window.devicePixelRatio
+            renderer.setPixelRatio(Math.min(2, DPR))
+
+            // orbit controls
+            const controls = new THREE.OrbitControls(camera, renderer.domElement)
+
+            // light
+            scene.add(new THREE.HemisphereLight(0xffffbb, 0x080820, 1))
+            scene.add(new THREE.AmbientLight(0x666666))
+
+            const light = new THREE.DirectionalLight(0xdfebff, 1)
+            light.position.set(50, 200, 100)
+            light.position.multiplyScalar(1.3)
+
+            // physics
+            const physics = new AmmoPhysics(scene)
+            physics.debug.enable(true)
+
+            // extract the object factory from physics
+            // the factory will make/add object without physics
+            const { factory } = physics
+
+            // static ground
+            physics.add.ground({ width: 500, height: 500 })
+
+            console.log(player);
+
+            // "Last" player - demo data
+            player.forEach((p,i) => {
+                    const geometry = new THREE.BoxBufferGeometry();;
+                    const material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
+                    const cube = new THREE.Mesh(geometry, material);
+                    cube.position.set( p.x , p.y, p.z);
+                    scene.add(cube);
+                }
+            );
+
+            // clock
+            const clock = new THREE.Clock()
+
+            // loop
+            const animate = () => {
+                physics.update(clock.getDelta() * 1000)
+                physics.updateDebugger()
+                renderer.render(scene, camera)
+                requestAnimationFrame(animate)
+            }
+            requestAnimationFrame(animate)
+        }
+        PhysicsLoader('/lib/ammo/kripken', () => MainScene())
+        console.log(`three.js version "${THREE.REVISION}"`)
+
+        var source = new EventSource("/players");
+        source.onmessage = (event) => {
+            console.log("event ... " + event);
+            var json = JSON.parse(event.data);
+            console.log(json);
+            player.push({ x:json.x,y:json.y,z:json.z});
+
+            const geometry = new THREE.BoxBufferGeometry();;
+            const material = new THREE.MeshLambertMaterial({ color: 0xFF0000 });
+            const cube = new THREE.Mesh(geometry, material);
+            cube.position.set( json.x , json.y, json.z);
+            scene.add(cube);
+
+            // Update Screen
+            renderer.render(scene, camera)
+
+        };
+
+    </script>
+</body>
+
+</html>
