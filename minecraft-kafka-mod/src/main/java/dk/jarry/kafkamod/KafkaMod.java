@@ -24,9 +24,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
+import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
+import net.minecraftforge.event.server.ServerStoppedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -56,7 +62,6 @@ public class KafkaMod {
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
 
-        // Do something when the server starts
         LOGGER.info(KafkaMod.class.getSimpleName() + " - Server starting - Spin up Kafka");
 
         Properties props = new Properties();
@@ -68,6 +73,42 @@ public class KafkaMod {
         createTopic(KAFKA_MOD_ITEM_STACK, props);
         producer = new KafkaProducer<String, JsonNode>(props);
 
+    }
+
+    @SubscribeEvent
+    public void onServerStoppedEvent(ServerStoppedEvent event) {
+        LOGGER.info(KafkaMod.class.getSimpleName() + " - Server stopping - Graceful cloase connection to Kafka");
+        producer.close();
+    }
+
+    @SubscribeEvent
+    public void onEntityJoinLevelEvent(EntityJoinLevelEvent event) {
+        Entity entity = event.getEntity();
+        double x = entity.getX();
+        double y = entity.getY();
+        double z = entity.getZ();
+        if(entity != null){
+            LOGGER.info("Entity - name:" + entity.getName() + " join the world (x:" + x + ",y:" + y + ",z:" + z + ")");
+        }
+    }
+
+    @SubscribeEvent
+    public void onEntityLeaveLevelEvent(EntityLeaveLevelEvent event) {
+        Entity entity = event.getEntity();
+        double x = entity.getX();
+        double y = entity.getY();
+        double z = entity.getZ();
+        if(entity != null){
+            LOGGER.info("Entity - name:" + entity.getName() + " leave the world (x:" + x + ",y:" + y + ",z:" + z + ")");
+        }
+    }
+
+    @SubscribeEvent
+    public void onPlayerDestroyItemEvent(PlayerDestroyItemEvent event) {
+        Player player = event.getEntity();
+        KafkaModPlayer kmPlayer = new KafkaModPlayer(player);
+        ItemStack stack = event.getOriginal();
+        LOGGER.info("Component Destroy : " + stack.getDisplayName().getString() + " " + kmPlayer);
     }
 
     @SubscribeEvent

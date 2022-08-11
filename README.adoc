@@ -196,6 +196,8 @@ bin/kafka-console-consumer.sh \
 
 - https://files.minecraftforge.net/net/minecraftforge/forge/[Downloads for Minecraft Forge]
 - https://docs.minecraftforge.net/en/latest/[MinecraftForge Documentation]
+- https://nekoyue.github.io/ForgeJavaDocs-NG/javadoc/1.19.1/index.html
 - https://quarkus.io/guides/kafka-reactive-getting-started[Getting Started to SmallRye Reactive Messaging with Apache Kafka - Quarkus]
+- https://kafka.apache.org/32/javadoc/index-all.html
 - https://threejs.org
 
