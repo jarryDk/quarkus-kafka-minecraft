@@ -21,10 +21,10 @@ import org.slf4j.Logger;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -46,6 +46,7 @@ public class KafkaMod {
     final static String MOD_NAME = "kafkamod";
     final static String KAFKA_MOD_CHAT = "kafka-mod-chat";
     final static String KAFKA_MOD_ITEM_STACK = "kafka-mod-item-stack";
+    final static String KAFKA_MOD_ENTITY_EVENT = "kafka-mod-entity-event";
     final static String KAFKA_BOOTSTRAP_SERVERS = "localhost:9092";
 
     public static Map<String, Player> playerInGame = new ConcurrentHashMap<String, Player>();
@@ -71,6 +72,7 @@ public class KafkaMod {
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class.getName());
         createTopic(KAFKA_MOD_CHAT, props);
         createTopic(KAFKA_MOD_ITEM_STACK, props);
+        createTopic(KAFKA_MOD_ENTITY_EVENT, props);
         producer = new KafkaProducer<String, JsonNode>(props);
 
     }
@@ -83,24 +85,20 @@ public class KafkaMod {
 
     @SubscribeEvent
     public void onEntityJoinLevelEvent(EntityJoinLevelEvent event) {
-        Entity entity = event.getEntity();
-        double x = entity.getX();
-        double y = entity.getY();
-        double z = entity.getZ();
-        if(entity != null){
-            LOGGER.info("Entity - name:" + entity.getName() + " join the world (x:" + x + ",y:" + y + ",z:" + z + ")");
-        }
+        EntityRecord entityRecord = new EntityRecord(event);
+        String key = entityRecord.getName();
+        JsonNode record = objectMapper.valueToTree(entityRecord);
+        addRecordToTopic(key, record, KAFKA_MOD_ENTITY_EVENT);
+        LOGGER.info(entityRecord.toString());
     }
 
     @SubscribeEvent
     public void onEntityLeaveLevelEvent(EntityLeaveLevelEvent event) {
-        Entity entity = event.getEntity();
-        double x = entity.getX();
-        double y = entity.getY();
-        double z = entity.getZ();
-        if(entity != null){
-            LOGGER.info("Entity - name:" + entity.getName() + " leave the world (x:" + x + ",y:" + y + ",z:" + z + ")");
-        }
+        EntityRecord entityRecord = new EntityRecord(event);
+        String key = entityRecord.getName();
+        JsonNode record = objectMapper.valueToTree(entityRecord);
+        addRecordToTopic(key, record, KAFKA_MOD_ENTITY_EVENT);
+        LOGGER.info(entityRecord.toString());
     }
 
     @SubscribeEvent
@@ -112,13 +110,13 @@ public class KafkaMod {
     }
 
     @SubscribeEvent
-    public void onChat(net.minecraftforge.event.ServerChatEvent event){
+    public void onChat(net.minecraftforge.event.ServerChatEvent event) {
 
         ServerPlayer player = event.getPlayer();
         String message = event.getMessage().getString();
 
         KafkaModPlayer kmPlayer = new KafkaModPlayer(player);
-        ChatRecord cr = new ChatRecord(kmPlayer,message);
+        ChatRecord cr = new ChatRecord(kmPlayer, message);
 
         String key = kmPlayer.getName();
         JsonNode record = objectMapper.valueToTree(cr);
@@ -140,19 +138,20 @@ public class KafkaMod {
         }
     }
 
-    public static void addRecordToTopic(String key, JsonNode record, String topic){
-        System.out.printf("Producing record: %s\t%s%n", key, record);
+    public static void addRecordToTopic(String key, JsonNode record, String topic) {
+        // System.out.printf("Producing record: %s\t%s%n", key, record);
         producer.send(new ProducerRecord<String, JsonNode>(topic, key, record), new Callback() {
             @Override
             public void onCompletion(RecordMetadata m, Exception e) {
                 if (e != null) {
                     e.printStackTrace();
-                } else {
-                    System.out.printf("Produced record to topic %s partition [%d] @ offset %d%n",
-                        m.topic(),
-                        m.partition(),
-                        m.offset());
-                }
+                } 
+                // else {
+                //     System.out.printf("Produced record to topic %s partition [%d] @ offset %d%n",
+                //             m.topic(),
+                //             m.partition(),
+                //             m.offset());
+                // }
             }
         });
     }

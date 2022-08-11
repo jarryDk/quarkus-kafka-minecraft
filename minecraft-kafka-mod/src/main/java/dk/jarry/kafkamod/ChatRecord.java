@@ -1,5 +1,8 @@
 package dk.jarry.kafkamod;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonPropertyOrder(alphabetic = true)
 public class ChatRecord {
 
     KafkaModPlayer player;

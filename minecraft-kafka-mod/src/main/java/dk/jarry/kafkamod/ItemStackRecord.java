@@ -1,8 +1,11 @@
 package dk.jarry.kafkamod;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
+@JsonPropertyOrder(alphabetic = true)
 public class ItemStackRecord {
 
     KafkaModPlayer player;

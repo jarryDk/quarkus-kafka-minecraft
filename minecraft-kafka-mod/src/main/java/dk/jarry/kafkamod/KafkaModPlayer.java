@@ -1,30 +1,23 @@
 package dk.jarry.kafkamod;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
-public class KafkaModPlayer {
+@JsonPropertyOrder(alphabetic = true)
+public class KafkaModPlayer extends Location {
 
     Player player;
 
     public KafkaModPlayer(ServerPlayer player){
+        super(player.getX(), player.getZ(), player.getZ());
         this.player = player;
     }
 
     public KafkaModPlayer(Player player){
+        super(player.getX(), player.getZ(), player.getZ());
         this.player = player;
-    }
-
-    public double getX(){
-        return player.getX();
-    }
-
-    public double getY(){
-        return player.getY();
-    }
-
-    public double getZ(){
-        return player.getZ();
     }
 
     public String getIpAddress(){
