@@ -1,9 +1,15 @@
 = Use Kafka and Quarkus to track players in Minecraft
 
-This project is created to show how to track players movement in Minecraft via Kafka and Quarkus.
+This project is created to show how to track events including players movement in Minecraft via Kafka and Quarkus.
 
+.Full flow (Minecraft client, Minecraft server via Kafka and Quarkus to the browser)
+
+image::images/quarkus-kafka-minecraft_diagram.png[]
+
+.The page player.html in a browser
 image::images/show_player_in_browser.png[]
 
+.Part of the log when Minecraft spins up with the mod `kafkamod` installed
 image::images/minecraft_server_start.png[]
 
 The Minecraft mod `kafkamod` might be a bit to chatty, but it is nice doing development.
@@ -338,6 +344,7 @@ Source : https://kafka.apache.org/documentation/#basic_ops_increase_replication_
 - https://quarkus.io/guides/kafka-reactive-getting-started[Getting Started to SmallRye Reactive Messaging with Apache Kafka - Quarkus]
 - https://threejs.org
 - https://stedolan.github.io/jq/
+- https://sequencediagram.org/
 
 === Kafka links
 

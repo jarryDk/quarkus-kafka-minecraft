@@ -43,7 +43,7 @@ public class KafkaMod {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     final static String MOD_NAME = "kafkamod";
-   
+
     public static Map<String, Player> playerInGame = new ConcurrentHashMap<String, Player>();
     public final static ObjectMapper objectMapper = new ObjectMapper();
     private static Producer<String, JsonNode> producer;
@@ -140,7 +140,7 @@ public class KafkaMod {
             public void onCompletion(RecordMetadata m, Exception e) {
                 if (e != null) {
                     e.printStackTrace();
-                } 
+                }
                 // else {
                 //     System.out.printf("Produced record to topic %s partition [%d] @ offset %d%n",
                 //             m.topic(),

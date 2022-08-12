@@ -1,0 +1,31 @@
+title Use Kafka and Quarkus to track players in Minecraft
+
+Minecraft client->Minecraft server:Connect to server
+
+Minecraft client->Minecraft server:Play game
+
+Minecraft server->minecraft-kafka-mod:Events
+
+minecraft-kafka-mod->Kafka:Chat event
+
+minecraft-kafka-mod->Kafka:Item-Stack Event
+
+minecraft-kafka-mod->Kafka:Entity Event
+
+minecraft-kafka-mod-->>Minecraft client:Player respawn - sendt to all players
+
+minecraft-kafka-mod-->>Minecraft client:Player changed dimension - sendt to all players
+
+Kafka->>quarkus-kafka:Item-Stack Event
+
+quarkus-kafka->quarkus-kafka:Convert Item-Stack Event\n to Player Events\n(ItemStackProcessor)
+
+quarkus-kafka->>web-browser:Request page player.html
+
+quarkus-kafka<<--web-browser:Display player.html via\nendpoint /players (PlayerResource)
+
+quarkus-kafka->>web-browser:Request page player_graf.html
+
+quarkus-kafka<<--web-browser:Display player_graf.html via\nendpoint /players (PlayerResource)
+
+// https://sequencediagram.org/
