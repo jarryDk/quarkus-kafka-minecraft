@@ -207,9 +207,9 @@ TIP: Add ` | jq` to get the json from the topic in a nice format. How to install
 [source,bash]
 ----
 $KAFKA_HOME/bin/kafka-console-consumer.sh \
+    --bootstrap-server localhost:9092 \
     --topic kafka-mod-chat \
-    --from-beginning \
-    --bootstrap-server localhost:9092
+    --from-beginning
 ----
 
 .Consume the kafka-mod-item-stack topic
@@ -217,9 +217,9 @@ $KAFKA_HOME/bin/kafka-console-consumer.sh \
 [source,bash]
 ----
 $KAFKA_HOME/bin/kafka-console-consumer.sh \
+    --bootstrap-server localhost:9092 \
     --topic kafka-mod-item-stack \
-    --from-beginning \
-    --bootstrap-server localhost:9092
+    --from-beginning
 ----
 
 .Consume the kafka-mod-entity-event topic
@@ -227,9 +227,9 @@ $KAFKA_HOME/bin/kafka-console-consumer.sh \
 [source,bash]
 ----
 $KAFKA_HOME/bin/kafka-console-consumer.sh \
+    --bootstrap-server localhost:9092 \
     --topic kafka-mod-entity-event \
-    --from-beginning \
-    --bootstrap-server localhost:9092
+    --from-beginning
 ----
 
 .Create the topic kafka-mod-entity-event (if needed)
@@ -237,9 +237,31 @@ $KAFKA_HOME/bin/kafka-console-consumer.sh \
 [source,bash]
 ----
 $KAFKA_HOME/bin/kafka-topics.sh \
-    --create \
+    --bootstrap-server localhost:9092 \
     --topic kafka-mod-entity-event \
-    --bootstrap-server localhost:9092
+    --create
+----
+
+.Create the topic kafka-mod-entity-event - adv. #1 (if needed)
+
+[source,bash]
+----
+$KAFKA_HOME/bin/kafka-topics.sh \
+    --bootstrap-server localhost:9092 \
+    --topic kafka-mod-entity-event \
+    --replica-assignment 0:1:2,0:1:2,0:1:2 \
+    --create
+----
+
+.Create the topic kafka-mod-entity-event - adv. #2 (if needed)
+
+[source,bash]
+----
+$KAFKA_HOME/bin/kafka-topics.sh \
+    --bootstrap-server localhost:9092 \
+    --topic kafka-mod-entity-event \
+    --replication-factor 2 \
+    --create
 ----
 
 .Discribe the topic kafka-mod-entity-event
@@ -247,9 +269,9 @@ $KAFKA_HOME/bin/kafka-topics.sh \
 [source,bash]
 ----
 $KAFKA_HOME/bin/kafka-topics.sh \
-    --describe \
+    --bootstrap-server localhost:9092 \
     --topic kafka-mod-entity-event \
-    --bootstrap-server localhost:9092
+    --describe
 ----
 
 .Modify the topic kafka-mod-entity-event - change partitions
@@ -257,10 +279,10 @@ $KAFKA_HOME/bin/kafka-topics.sh \
 [source,bash]
 ----
 $KAFKA_HOME/bin/kafka-topics.sh \
+    --bootstrap-server localhost:9092 \
     --topic kafka-mod-entity-event \
-    --alter \
     --partitions 3 \
-    --bootstrap-server localhost:9092
+    --alter
 ----
 
 NOTE: This can be done with kafka-reassign-partitions.sh too.
@@ -271,8 +293,8 @@ NOTE: This can be done with kafka-reassign-partitions.sh too.
 ----
 $KAFKA_HOME/bin/kafka-topics.sh \
     --bootstrap-server localhost:9092 \
-    --delete \
-    --topic kafka-mod-entity-event
+    --topic kafka-mod-entity-event \
+    --delete
 ----
 
 .Increasing replication factor for the topic kafka-mod-entity-event
@@ -289,7 +311,8 @@ cat > increase-replication-factor.json << EOF
             "replicas": [
                 0,
                 1
-            ]
+            ],
+            "replication-factor" : 2
         }
     ]
 }
@@ -305,7 +328,6 @@ $KAFKA_HOME/bin/kafka-reassign-partitions.sh \
 ----
 
 Source : https://kafka.apache.org/documentation/#basic_ops_increase_replication_factor
-
 
 
 == Links
@@ -327,4 +349,4 @@ Source : https://kafka.apache.org/documentation/#basic_ops_increase_replication_
 - https://medium.com/@_amanarora/replication-in-kafka-58b39e91b64e
 - https://www.confluent.io/blog/hands-free-kafka-replication-a-lesson-in-operational-simplicity/
 - https://kafka.apache.org/documentation/#basic_ops_increase_replication_factor
-
+- https://sleeplessbeastie.eu/2022/01/05/how-to-reassign-kafka-topic-partitions-and-replicas/[How to reassign Kafka topic partitions]
