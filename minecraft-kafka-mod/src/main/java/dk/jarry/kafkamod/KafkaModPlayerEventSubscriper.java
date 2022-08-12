@@ -78,7 +78,7 @@ public class KafkaModPlayerEventSubscriper {
         String key = kmPlayer.getName();
         JsonNode record = KafkaMod.objectMapper.valueToTree(cr);
 
-        KafkaMod.addRecordToTopic(key, record, KafkaMod.KAFKA_MOD_ITEM_STACK);
+        KafkaMod.addRecordToTopic(key, record, KafkaProperties.KAFKA_MOD_ITEM_STACK);
     }
 
     @SubscribeEvent
@@ -93,7 +93,7 @@ public class KafkaModPlayerEventSubscriper {
         String key = kmPlayer.getName();
         JsonNode record = KafkaMod.objectMapper.valueToTree(cr);
 
-        KafkaMod.addRecordToTopic(key, record, KafkaMod.KAFKA_MOD_ITEM_STACK);
+        KafkaMod.addRecordToTopic(key, record, KafkaProperties.KAFKA_MOD_ITEM_STACK);
     }
 
 }

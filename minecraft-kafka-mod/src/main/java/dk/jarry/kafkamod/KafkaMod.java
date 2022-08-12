@@ -44,11 +44,7 @@ public class KafkaMod {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     final static String MOD_NAME = "kafkamod";
-    final static String KAFKA_MOD_CHAT = "kafka-mod-chat";
-    final static String KAFKA_MOD_ITEM_STACK = "kafka-mod-item-stack";
-    final static String KAFKA_MOD_ENTITY_EVENT = "kafka-mod-entity-event";
-    final static String KAFKA_BOOTSTRAP_SERVERS = "localhost:9092";
-
+   
     public static Map<String, Player> playerInGame = new ConcurrentHashMap<String, Player>();
     public final static ObjectMapper objectMapper = new ObjectMapper();
     private static Producer<String, JsonNode> producer;
@@ -66,13 +62,13 @@ public class KafkaMod {
         LOGGER.info(KafkaMod.class.getSimpleName() + " - Server starting - Spin up Kafka");
 
         Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, KAFKA_BOOTSTRAP_SERVERS);
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaProperties.KAFKA_BOOTSTRAP_SERVERS);
         props.put(ProducerConfig.ACKS_CONFIG, "all");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class.getName());
-        createTopic(KAFKA_MOD_CHAT, props);
-        createTopic(KAFKA_MOD_ITEM_STACK, props);
-        createTopic(KAFKA_MOD_ENTITY_EVENT, props);
+        createTopic(KafkaProperties.KAFKA_MOD_CHAT, props);
+        createTopic(KafkaProperties.KAFKA_MOD_ITEM_STACK, props);
+        createTopic(KafkaProperties.KAFKA_MOD_ENTITY_EVENT, props);
         producer = new KafkaProducer<String, JsonNode>(props);
 
     }
@@ -88,7 +84,7 @@ public class KafkaMod {
         EntityRecord entityRecord = new EntityRecord(event);
         String key = entityRecord.getName();
         JsonNode record = objectMapper.valueToTree(entityRecord);
-        addRecordToTopic(key, record, KAFKA_MOD_ENTITY_EVENT);
+        addRecordToTopic(key, record, KafkaProperties.KAFKA_MOD_ENTITY_EVENT);
         LOGGER.info(entityRecord.toString());
     }
 
@@ -97,7 +93,7 @@ public class KafkaMod {
         EntityRecord entityRecord = new EntityRecord(event);
         String key = entityRecord.getName();
         JsonNode record = objectMapper.valueToTree(entityRecord);
-        addRecordToTopic(key, record, KAFKA_MOD_ENTITY_EVENT);
+        addRecordToTopic(key, record, KafkaProperties.KAFKA_MOD_ENTITY_EVENT);
         LOGGER.info(entityRecord.toString());
     }
 
@@ -121,7 +117,7 @@ public class KafkaMod {
         String key = kmPlayer.getName();
         JsonNode record = objectMapper.valueToTree(cr);
 
-        addRecordToTopic(key, record, KAFKA_MOD_CHAT);
+        addRecordToTopic(key, record, KafkaProperties.KAFKA_MOD_CHAT);
 
         LOGGER.info("Player : " + player + " - Message : " + message);
 

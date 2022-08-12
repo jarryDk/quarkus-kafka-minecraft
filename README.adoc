@@ -232,6 +232,81 @@ $KAFKA_HOME/bin/kafka-console-consumer.sh \
     --bootstrap-server localhost:9092
 ----
 
+.Create the topic kafka-mod-entity-event (if needed)
+
+[source,bash]
+----
+$KAFKA_HOME/bin/kafka-topics.sh \
+    --create \
+    --topic kafka-mod-entity-event \
+    --bootstrap-server localhost:9092
+----
+
+.Discribe the topic kafka-mod-entity-event
+
+[source,bash]
+----
+$KAFKA_HOME/bin/kafka-topics.sh \
+    --describe \
+    --topic kafka-mod-entity-event \
+    --bootstrap-server localhost:9092
+----
+
+.Modify the topic kafka-mod-entity-event - change partitions
+
+[source,bash]
+----
+$KAFKA_HOME/bin/kafka-topics.sh \
+    --topic kafka-mod-entity-event \
+    --alter \
+    --partitions 3 \
+    --bootstrap-server localhost:9092
+----
+
+NOTE: This can be done with kafka-reassign-partitions.sh too.
+
+.Delete the topic kafka-mod-entity-event
+
+[source,bash]
+----
+$KAFKA_HOME/bin/kafka-topics.sh \
+    --bootstrap-server localhost:9092 \
+    --delete \
+    --topic kafka-mod-entity-event
+----
+
+.Increasing replication factor for the topic kafka-mod-entity-event
+
+[source,bash]
+----
+cat > increase-replication-factor.json << EOF
+{
+    "version": 1,
+    "partitions": [
+        {
+            "topic": "kafka-mod-entity-event",
+            "partition": 0,
+            "replicas": [
+                0,
+                1
+            ]
+        }
+    ]
+}
+EOF
+----
+
+[source,bash]
+----
+$KAFKA_HOME/bin/kafka-reassign-partitions.sh \
+    --bootstrap-server localhost:9092 \
+    --reassignment-json-file increase-replication-factor.json \
+    --execute
+----
+
+Source : https://kafka.apache.org/documentation/#basic_ops_increase_replication_factor
+
+
 
 == Links
 
@@ -239,7 +314,17 @@ $KAFKA_HOME/bin/kafka-console-consumer.sh \
 - https://docs.minecraftforge.net/en/latest/[MinecraftForge Documentation]
 - https://nekoyue.github.io/ForgeJavaDocs-NG/javadoc/1.19.1/index.html
 - https://quarkus.io/guides/kafka-reactive-getting-started[Getting Started to SmallRye Reactive Messaging with Apache Kafka - Quarkus]
-- https://kafka.apache.org/32/javadoc/index-all.html
 - https://threejs.org
 - https://stedolan.github.io/jq/
+
+=== Kafka links
+
+- https://kafka.apache.org/32/javadoc/index-all.html
+- https://kafka.apache.org/32/javadoc/org/apache/kafka/clients/producer/KafkaProducer.html
+- https://kafka.apache.org/32/javadoc/org/apache/kafka/clients/consumer/KafkaConsumer.html
+- https://github.com/confluentinc/examples/tree/7.2.1-post/clients/cloud/java/src/main/java/io/confluent/examples/clients/cloud
+- https://hevodata.com/learn/kafka-replication/
+- https://medium.com/@_amanarora/replication-in-kafka-58b39e91b64e
+- https://www.confluent.io/blog/hands-free-kafka-replication-a-lesson-in-operational-simplicity/
+- https://kafka.apache.org/documentation/#basic_ops_increase_replication_factor
 
