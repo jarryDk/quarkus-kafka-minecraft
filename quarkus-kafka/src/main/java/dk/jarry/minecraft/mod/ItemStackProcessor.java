@@ -18,12 +18,11 @@ public class ItemStackProcessor {
     @Incoming("item-stack")
     @Outgoing("players")
     public Player process(String itemStack) throws InterruptedException {
-        System.out.println(itemStack);
 
         Player player = null;
         try {
             JsonNode itemStackObj = objectMapper.readTree(itemStack);
-            JsonNode playerObj  = itemStackObj.get("player");
+            JsonNode playerObj = itemStackObj.get("player");
             player = new Player(playerObj);
         } catch (Exception e) {
             e.printStackTrace();
