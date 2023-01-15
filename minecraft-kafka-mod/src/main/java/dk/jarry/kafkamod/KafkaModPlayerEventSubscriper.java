@@ -3,6 +3,7 @@ package dk.jarry.kafkamod;
 import org.slf4j.Logger;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.network.chat.Component;
@@ -17,31 +18,41 @@ public class KafkaModPlayerEventSubscriper {
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private KafkaModPlayerEventSubscriper(){
+    private KafkaModPlayerEventSubscriper() {
     }
 
-    public static void register(){
+    public static void register() {
         KafkaModPlayerEventSubscriper eventSubscriper = new KafkaModPlayerEventSubscriper();
         MinecraftForge.EVENT_BUS.register(eventSubscriper);
     }
 
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        Player player = event.getEntity();
-        String stringUUID = player.getStringUUID();
-        KafkaMod.playerInGame.put(stringUUID, player);
 
-        LOGGER.info(KafkaModPlayerEventSubscriper.class.getSimpleName() + " - Client connected: " + player);
+        PlayerEventRecord playerEventRecord = new PlayerEventRecord(event);
+
+        String key = playerEventRecord.getName();
+        KafkaMod.playerInGame.put(playerEventRecord.getStringUUID(), playerEventRecord.getPlayer());
+
+        KafkaMod.addRecordToTopic(key, playerEventRecord.toJsonNode(), KafkaProperties.KAFKA_MOD_PLAYER_EVENT);
+
+        LOGGER.info(KafkaModPlayerEventSubscriper.class.getSimpleName() + " - Client connected: "
+                + playerEventRecord.getPlayer());
 
     }
 
     @SubscribeEvent
     public void onPlayerLoginOut(PlayerEvent.PlayerLoggedOutEvent event) {
-        Player player = event.getEntity();
-        String stringUUID = player.getStringUUID();
-        KafkaMod.playerInGame.remove(stringUUID);
 
-        LOGGER.info(KafkaModPlayerEventSubscriper.class.getSimpleName() + " - Client disconnected: " + player);
+        PlayerEventRecord playerEventRecord = new PlayerEventRecord(event);
+
+        String key = playerEventRecord.getName();
+        KafkaMod.playerInGame.remove(playerEventRecord.getStringUUID());
+
+        KafkaMod.addRecordToTopic(key, playerEventRecord.toJsonNode(), KafkaProperties.KAFKA_MOD_PLAYER_EVENT);
+        
+        LOGGER.info(KafkaModPlayerEventSubscriper.class.getSimpleName() + " - Client disconnected: "
+                + playerEventRecord.getPlayer());
     }
 
     @SubscribeEvent
@@ -50,7 +61,7 @@ public class KafkaModPlayerEventSubscriper {
         KafkaModPlayer pl = new KafkaModPlayer(player);
         LOGGER.info("ChangedDimension - " + pl);
 
-        KafkaMod.playerInGame.values().stream().forEach( p -> {
+        KafkaMod.playerInGame.values().stream().forEach(p -> {
             p.displayClientMessage(Component.literal("ChangedDimension of player - " + pl), true);
         });
     }
@@ -61,9 +72,13 @@ public class KafkaModPlayerEventSubscriper {
         KafkaModPlayer pl = new KafkaModPlayer(player);
         LOGGER.info("Respawn - " + pl);
 
-        KafkaMod.playerInGame.values().stream().forEach( p -> {
+        KafkaMod.playerInGame.values().stream().forEach(p -> {
             p.displayClientMessage(Component.literal("Respawn of player - " + pl), true);
         });
+
+        // If you like some fun when respawn !!!
+        // KafkaMod.dropTnTByPlayer(player, 3);
+
     }
 
     @SubscribeEvent
@@ -79,6 +94,7 @@ public class KafkaModPlayerEventSubscriper {
         JsonNode record = KafkaMod.objectMapper.valueToTree(cr);
 
         KafkaMod.addRecordToTopic(key, record, KafkaProperties.KAFKA_MOD_ITEM_STACK);
+
     }
 
     @SubscribeEvent
@@ -94,6 +110,7 @@ public class KafkaModPlayerEventSubscriper {
         JsonNode record = KafkaMod.objectMapper.valueToTree(cr);
 
         KafkaMod.addRecordToTopic(key, record, KafkaProperties.KAFKA_MOD_ITEM_STACK);
+
     }
 
 }

@@ -1,0 +1,14 @@
+$KAFKA_HOME/bin/kafka-console-consumer.sh \
+	--bootstrap-server localhost:9092 \
+	--topic kafka-mod-entity-event \
+	--from-beginning | jq
+	
+$KAFKA_HOME/bin/kafka-console-consumer.sh \
+	--bootstrap-server localhost:9092 \
+	--topic kafka-mod-item-stack \
+	--from-beginning | jq
+
+$KAFKA_HOME/bin/kafka-console-consumer.sh \
+	--bootstrap-server localhost:9092 \
+	--topic kafka-mod-chat \
+	--from-beginning | jq

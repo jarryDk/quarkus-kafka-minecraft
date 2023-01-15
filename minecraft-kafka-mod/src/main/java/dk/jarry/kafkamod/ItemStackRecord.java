@@ -1,6 +1,7 @@
 package dk.jarry.kafkamod;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -30,7 +31,10 @@ public class ItemStackRecord {
         Component component = stack.getDisplayName();
         String regex = "[!^\\[\\]]";
         return component.getString().replaceAll(regex, "");
+    }
 
+    public JsonNode toJsonNode() {
+        return KafkaMod.objectMapper.valueToTree(this);
     }
 
 }

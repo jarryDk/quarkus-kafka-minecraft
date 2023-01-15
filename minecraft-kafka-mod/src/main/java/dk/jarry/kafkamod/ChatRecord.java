@@ -1,6 +1,7 @@
 package dk.jarry.kafkamod;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.JsonNode;
 
 @JsonPropertyOrder(alphabetic = true)
 public class ChatRecord {
@@ -23,6 +24,15 @@ public class ChatRecord {
 
     public String getMessage() {
         return message;
+    }
+
+    @Override
+    public String toString() {
+        return "ChatRecord [player=" + player + ", message=" + message + "]";
+    }
+
+    public JsonNode toJsonNode() {
+        return KafkaMod.objectMapper.valueToTree(this);
     }
 
 }

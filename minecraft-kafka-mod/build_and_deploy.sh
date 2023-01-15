@@ -1,5 +1,7 @@
 #!/bin/bash
 
+./gradlew build
+
 FORGE_SERVER_VERSION=1.19.3-44.1.5
 FORGE_SERVER_LOCATION="/opt/minecraft/forge/.minecraft_$FORGE_SERVER_VERSION"
 

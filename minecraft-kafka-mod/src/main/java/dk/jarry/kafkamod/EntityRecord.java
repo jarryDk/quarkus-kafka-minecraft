@@ -1,6 +1,7 @@
 package dk.jarry.kafkamod;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.event.entity.EntityEvent;
@@ -37,6 +38,10 @@ public class EntityRecord extends Location {
         }
         return "Entity - name: " + getName() + " " + action + " - location : { x:" + x + ", y:" + y + ", z:"
                 + z + "}";
+    }
+
+    public JsonNode toJsonNode() {
+        return KafkaMod.objectMapper.valueToTree(this);
     }
 
 }
