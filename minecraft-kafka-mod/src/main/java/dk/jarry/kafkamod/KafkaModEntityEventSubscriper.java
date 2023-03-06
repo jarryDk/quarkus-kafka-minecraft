@@ -2,7 +2,6 @@ package dk.jarry.kafkamod;
 
 import org.slf4j.Logger;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.mojang.logging.LogUtils;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -21,6 +20,7 @@ public class KafkaModEntityEventSubscriper {
     public static void register(){
         KafkaModEntityEventSubscriper eventSubscriper = new KafkaModEntityEventSubscriper();
         MinecraftForge.EVENT_BUS.register(eventSubscriper);
+        LOGGER.info(eventSubscriper.getClass().getSimpleName() + " add to The core Forge EventBusses");
     }
 
     @SubscribeEvent

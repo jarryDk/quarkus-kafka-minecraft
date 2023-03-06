@@ -24,7 +24,7 @@ public class PlayerEventRecord extends KafkaModPlayer {
         this.player = event.getEntity();
         typeOfEvent = event.getClass().getSimpleName();
     }
-   
+
     public String getTimeStamp() {
         return timeStamp;
     }

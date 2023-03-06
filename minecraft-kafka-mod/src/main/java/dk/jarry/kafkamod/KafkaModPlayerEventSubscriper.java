@@ -3,7 +3,6 @@ package dk.jarry.kafkamod;
 import org.slf4j.Logger;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.mojang.authlib.properties.PropertyMap;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.network.chat.Component;
@@ -24,6 +23,7 @@ public class KafkaModPlayerEventSubscriper {
     public static void register() {
         KafkaModPlayerEventSubscriper eventSubscriper = new KafkaModPlayerEventSubscriper();
         MinecraftForge.EVENT_BUS.register(eventSubscriper);
+        LOGGER.info(eventSubscriper.getClass().getSimpleName() + " add to The core Forge EventBusses");
     }
 
     @SubscribeEvent
@@ -50,7 +50,7 @@ public class KafkaModPlayerEventSubscriper {
         KafkaMod.playerInGame.remove(playerEventRecord.getStringUUID());
 
         KafkaMod.addRecordToTopic(key, playerEventRecord.toJsonNode(), KafkaProperties.KAFKA_MOD_PLAYER_EVENT);
-        
+
         LOGGER.info(KafkaModPlayerEventSubscriper.class.getSimpleName() + " - Client disconnected: "
                 + playerEventRecord.getPlayer());
     }
