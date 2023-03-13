@@ -29,3 +29,4 @@ bin/*
 minecraft-kafka-mod/bin/main/pack.mcmeta
 .settings/*
 minecraft-kafka-mod/.settings/org.eclipse.buildship.core.prefs
+minecraft-kafka-mod/.settings/org.eclipse.buildship.core.prefs
