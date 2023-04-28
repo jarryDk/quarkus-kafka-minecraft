@@ -1,10 +1,15 @@
-package dk.jarry.kafkamod;
+package dk.jarry.kafkamod.control;
 
 import org.slf4j.Logger;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mojang.logging.LogUtils;
 
+import dk.jarry.kafkamod.KafkaMod;
+import dk.jarry.kafkamod.KafkaProperties;
+import dk.jarry.kafkamod.entity.ItemStackRecord;
+import dk.jarry.kafkamod.entity.KafkaModPlayer;
+import dk.jarry.kafkamod.entity.PlayerEventRecord;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -12,18 +17,18 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class KafkaModPlayerEventSubscriper {
+public class PlayerEventSubscriber {
 
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private KafkaModPlayerEventSubscriper() {
+    private PlayerEventSubscriber() {
     }
 
     public static void register() {
-        KafkaModPlayerEventSubscriper eventSubscriper = new KafkaModPlayerEventSubscriper();
-        MinecraftForge.EVENT_BUS.register(eventSubscriper);
-        LOGGER.info(eventSubscriper.getClass().getSimpleName() + " add to The core Forge EventBusses");
+        PlayerEventSubscriber eventSubscriber = new PlayerEventSubscriber();
+        MinecraftForge.EVENT_BUS.register(eventSubscriber);
+        LOGGER.info(eventSubscriber.getClass().getSimpleName() + " add to The core Forge EventBusses");
     }
 
     @SubscribeEvent
@@ -36,7 +41,7 @@ public class KafkaModPlayerEventSubscriper {
 
         KafkaMod.addRecordToTopic(key, playerEventRecord.toJsonNode(), KafkaProperties.KAFKA_MOD_PLAYER_EVENT);
 
-        LOGGER.info(KafkaModPlayerEventSubscriper.class.getSimpleName() + " - Client connected: "
+        LOGGER.info(PlayerEventSubscriber.class.getSimpleName() + " - Client connected: "
                 + playerEventRecord.getPlayer());
 
     }
@@ -51,7 +56,7 @@ public class KafkaModPlayerEventSubscriper {
 
         KafkaMod.addRecordToTopic(key, playerEventRecord.toJsonNode(), KafkaProperties.KAFKA_MOD_PLAYER_EVENT);
 
-        LOGGER.info(KafkaModPlayerEventSubscriper.class.getSimpleName() + " - Client disconnected: "
+        LOGGER.info(PlayerEventSubscriber.class.getSimpleName() + " - Client disconnected: "
                 + playerEventRecord.getPlayer());
     }
 

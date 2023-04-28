@@ -1,8 +1,9 @@
-package dk.jarry.kafkamod;
+package dk.jarry.kafkamod.entity;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonNode;
 
+import dk.jarry.kafkamod.KafkaMod;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;

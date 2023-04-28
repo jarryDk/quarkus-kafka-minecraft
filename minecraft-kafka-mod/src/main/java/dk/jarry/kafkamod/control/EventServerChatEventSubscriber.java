@@ -1,25 +1,29 @@
-package dk.jarry.kafkamod;
+package dk.jarry.kafkamod.control;
 
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
+import dk.jarry.kafkamod.KafkaMod;
+import dk.jarry.kafkamod.KafkaProperties;
+import dk.jarry.kafkamod.entity.ChatRecord;
+import dk.jarry.kafkamod.entity.KafkaModPlayer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class KafkaModEventSubscriper {
+public class EventServerChatEventSubscriber {
 
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    private KafkaModEventSubscriper() {
+    private EventServerChatEventSubscriber() {
     }
 
     public static void register() {
-        KafkaModEventSubscriper eventSubscriper = new KafkaModEventSubscriper();
-        MinecraftForge.EVENT_BUS.register(eventSubscriper);
-        LOGGER.info(eventSubscriper.getClass().getSimpleName() + " add to The core Forge EventBusses");
+        EventServerChatEventSubscriber eventSubscriber = new EventServerChatEventSubscriber();
+        MinecraftForge.EVENT_BUS.register(eventSubscriber);
+        LOGGER.info(eventSubscriber.getClass().getSimpleName() + " add to The core Forge EventBusses");
     }
 
     @SubscribeEvent

@@ -45,7 +45,7 @@ configurations {
 
 dependencies {
 
-    minecraft 'net.minecraftforge:forge:1.19.4-45.0.13'
+    minecraft 'net.minecraftforge:forge:1.19.4-45.0.49'
 
     implementation 'org.apache.kafka:kafka-clients:3.4.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'

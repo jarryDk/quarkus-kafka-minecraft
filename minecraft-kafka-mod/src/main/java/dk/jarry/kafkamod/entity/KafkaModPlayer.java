@@ -1,4 +1,4 @@
-package dk.jarry.kafkamod;
+package dk.jarry.kafkamod.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

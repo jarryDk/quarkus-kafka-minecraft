@@ -1,4 +1,4 @@
-package dk.jarry.kafkamod;
+package dk.jarry.kafkamod.entity;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonNode;
 
+import dk.jarry.kafkamod.KafkaMod;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 

@@ -1,7 +1,9 @@
-package dk.jarry.kafkamod;
+package dk.jarry.kafkamod.entity;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonNode;
+
+import dk.jarry.kafkamod.KafkaMod;
 
 @JsonPropertyOrder(alphabetic = true)
 public class ChatRecord {

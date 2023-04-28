@@ -8,7 +8,7 @@ mkdir -p libs
 
 #
 # kafka-clients and dependensies
-# 
+#
 if [ ! -f libs/kafka-clients-3.4.0.jar ]; then
     curl https://repo1.maven.org/maven2/org/apache/kafka/kafka-clients/3.4.0/kafka-clients-3.4.0.jar -o libs/kafka-clients-3.4.0.jar
 else

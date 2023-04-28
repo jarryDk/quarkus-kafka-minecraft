@@ -1,4 +1,4 @@
-package dk.jarry.kafkamod;
+package dk.jarry.kafkamod.entity;
 
 abstract class Location {
 

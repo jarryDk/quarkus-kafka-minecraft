@@ -21,6 +21,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mojang.logging.LogUtils;
 
+import dk.jarry.kafkamod.control.EntityEventSubscriber;
+import dk.jarry.kafkamod.control.EventServerChatEventSubscriber;
+import dk.jarry.kafkamod.control.PlayerEventSubscriber;
+import dk.jarry.kafkamod.control.PlayerSubscriber;
+import dk.jarry.kafkamod.control.PositionInFrontOfPlayer;
+import dk.jarry.kafkamod.control.ServerSubscriber;
+import dk.jarry.kafkamod.entity.KafkaModPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.horse.Llama;
 import net.minecraft.world.entity.item.PrimedTnt;
@@ -56,20 +63,24 @@ public class KafkaMod {
         if (kafkaModConfig.isPlayerEventEnabled()) {
             createTopic(KafkaProperties.KAFKA_MOD_PLAYER_EVENT);
             createTopic(KafkaProperties.KAFKA_MOD_ITEM_STACK);
-            // Register KafkaModPlayerEventSubscriper for PlayerEvent we are interested in
-            KafkaModPlayerEventSubscriper.register();
+            // Register PlayerEventSubscriber for PlayerEvent we are interested in
+            PlayerEventSubscriber.register();
         }
 
         if (kafkaModConfig.isEntityEventEnabled()) {
             createTopic(KafkaProperties.KAFKA_MOD_ENTITY_EVENT);
-            // Register KafkaModEntityEventSubscriper for EntityEvent we are interested in
-            KafkaModEntityEventSubscriper.register();
+            // Register EntityEventSubscriber for EntityEvent we are interested in
+            EntityEventSubscriber.register();
         }
 
-        KafkaModServerSubscriper.register();
-        KafkaModPlayerSubscriper.register();
-        createTopic(KafkaProperties.KAFKA_MOD_CHAT);
-        KafkaModEventSubscriper.register();
+        if (kafkaModConfig.isServerChatEventEnabled()) {
+            createTopic(KafkaProperties.KAFKA_MOD_CHAT);
+            // Register EventServerChatEventSubscriber for Server chat we are interested in
+            EventServerChatEventSubscriber.register();
+        }
+
+        ServerSubscriber.register();
+        PlayerSubscriber.register();
 
     }
 
@@ -95,7 +106,7 @@ public class KafkaMod {
 
     }
 
-    private static Optional<Producer<String, JsonNode>> getProducer() {
+    public static Optional<Producer<String, JsonNode>> getProducer() {
         if (producer == null) {
             LOGGER.warn("Someone did not start Kafka ...");
             if (producerConnectionAttempts % 10 == 0) {
@@ -121,9 +132,6 @@ public class KafkaMod {
         Optional<Integer> numPartitions = Optional.of(kafkaModConfig.getTopicNumPartitions()); // Default is 1
         Optional<Short> replicationFactor = Optional.of(kafkaModConfig.getTopicReplicationFactor()); // Default is 1
         final NewTopic newTopic = new NewTopic(topic, numPartitions, replicationFactor);
-        // Map<String,String> conf = new HashMap<>();
-        // conf.putIfAbsent("min.insync.replicas", "2");
-        // newTopic.configs(conf);
         try (final AdminClient adminClient = AdminClient.create(kafkaProperties)) {
             adminClient.createTopics(Collections.singletonList(newTopic)).all().get();
         } catch (final InterruptedException | ExecutionException e) {
@@ -131,52 +139,6 @@ public class KafkaMod {
                 throw new RuntimeException(e);
             }
         }
-    }
-
-    public static void dropTnTByPlayer(Player player, int num) {
-        KafkaModPlayer kafkaModPlayer = new KafkaModPlayer(player);
-
-        if (num < 1) {
-            throw new IllegalStateException("Num need to be bigger then 0 !");
-        }
-
-        Vec3 pos = getPositionInFrontOfPlayer(player, 3);
-        Vec3 posTnT = getPositionInFrontOfPlayer(player, 10);
-        Level world = player.getCommandSenderWorld();
-        Stream.iterate(0, i -> i).limit(num).forEach(i -> {
-
-            PrimedTnt primedTnt = EntityType.TNT.create(world);
-            primedTnt.setPos(posTnT);
-            primedTnt.setInvisible(Boolean.TRUE);
-            world.addFreshEntity(primedTnt);
-
-            // PrimedTnt newEntity = EntityType.TNT.create(world);
-            // MinecartTNT newEntity = EntityType.TNT_MINECART.create(world);
-            Llama newEntity = EntityType.LLAMA.create(world);
-            newEntity.setPos(pos);
-            newEntity.setInvisible(Boolean.TRUE);
-            world.addFreshEntity(newEntity);
-
-            ItemStack newItem = new ItemStack(Items.TNT);
-            player.getInventory().add(newItem);
-
-            LOGGER.info(newEntity.getName() + " was added x:" + pos.x() + ", y:" + pos.y() + ", z:" + pos.z());
-            LOGGER.info(kafkaModPlayer.toString());
-        });
-
-        Stream.iterate(0, i -> i).limit(10).forEach(i -> {
-            ItemStack newItem = new ItemStack(Items.FIRE_CHARGE);
-            player.getInventory().add(newItem);
-        });
-
-    }
-
-    private static Vec3 getPositionInFrontOfPlayer(Player player, int distance) {
-        double x = player.getX() + distance * player.getLookAngle().x;
-        double y = player.getY() + distance * player.getLookAngle().y;
-        double z = player.getZ() + distance * player.getLookAngle().z;
-        Vec3 pos = new Vec3(x, y, z);
-        return pos;
     }
 
 }
