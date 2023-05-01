@@ -1,0 +1,7 @@
+= QUarkus-Kafka
+
+== Players in 3D graf (vis)
+
+https://github.com/visjs/
+https://visjs.github.io/vis-graph3d/docs/graph3d/index.html
+
