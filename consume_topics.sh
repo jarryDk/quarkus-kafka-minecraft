@@ -58,7 +58,7 @@ if [ ! -z $KAFKA_TOPIC ]; then
 		--from-beginning | jq
 else
 	echo "Usage:"
-	echo "	consume_topics.sh [opstions]"
+	echo "	./consume_topics.sh [opstions]"
 	echo ""
     echo "Options:"
     echo "  -t|--topic      Topi: $KAFKA_TOPIC_KAFKA_MOD_CHAT | $KAFKA_TOPIC_KAFKA_MOD_ENTITY_EVENT | $KAFKA_TOPIC_KAFKA_MOD_ITEM_STACK"
@@ -66,4 +66,6 @@ else
     echo "  -p | --port     Port (default \"$KAFKA_PORT\")"
     echo "  --dryrun        Dryrun (true|false) (default \"$DRY_RUN\")"
     echo ""
+    echo "sample:"
+    echo "  ./consume_topics.sh -t kafka-mod-chat"
 fi
