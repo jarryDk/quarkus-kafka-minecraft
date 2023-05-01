@@ -9,11 +9,17 @@ KAFKA_TOPIC_KAFKA_MOD_ITEM_STACK="kafka-mod-item-stack"
 KAFKA_HOST=localhost
 KAFKA_PORT=9092
 KAFKA_TOPIC=
+KAFKA_GROUP=$LOGNAME-$(hostname)
 
 while [[ $# -gt 1 ]]; do
     case $1 in
         -t|--topic)
             KAFKA_TOPIC="$2"
+            shift # past argument
+            shift # past value
+            ;;
+        -g|--group)
+            KAFKA_GROUP="$2"
             shift # past argument
             shift # past value
             ;;
@@ -43,6 +49,7 @@ done
 if [ $DRY_RUN = true ]; then
     echo ""
 	echo "Topic: 	$KAFKA_TOPIC"
+    echo "Group: 	$KAFKA_GROUP"
 	echo "Host: 	$KAFKA_HOST"
 	echo "Port: 	$KAFKA_PORT"
     echo "Dryrun - Will not listen to topic"
@@ -50,18 +57,20 @@ if [ $DRY_RUN = true ]; then
 fi
 
 if [ ! -z $KAFKA_TOPIC ]; then
-	printf "\e]2;Topic: $KAFKA_TOPIC - Host: $KAFKA_HOST - Port: $KAFKA_PORT\a"
+	printf "\e]2;Topic: $KAFKA_TOPIC - Group: $KAFKA_GROUP - Host: $KAFKA_HOST - Port: $KAFKA_PORT\a"
 
 	$KAFKA_HOME/bin/kafka-console-consumer.sh \
 		--bootstrap-server $KAFKA_HOST:$KAFKA_PORT \
 		--topic $KAFKA_TOPIC \
+        --group $KAFKA_GROUP \
 		--from-beginning | jq
 else
 	echo "Usage:"
 	echo "	./consume_topics.sh [opstions]"
 	echo ""
     echo "Options:"
-    echo "  -t|--topic      Topi: $KAFKA_TOPIC_KAFKA_MOD_CHAT | $KAFKA_TOPIC_KAFKA_MOD_ENTITY_EVENT | $KAFKA_TOPIC_KAFKA_MOD_ITEM_STACK"
+    echo "  -t|--topic      Topic: $KAFKA_TOPIC_KAFKA_MOD_CHAT | $KAFKA_TOPIC_KAFKA_MOD_ENTITY_EVENT | $KAFKA_TOPIC_KAFKA_MOD_ITEM_STACK"
+    echo "  -g | --group    Group (default \"$KAFKA_GROUP\")"
     echo "  -h | --host     Host (default \"$KAFKA_HOST\")"
     echo "  -p | --port     Port (default \"$KAFKA_PORT\")"
     echo "  --dryrun        Dryrun (true|false) (default \"$DRY_RUN\")"

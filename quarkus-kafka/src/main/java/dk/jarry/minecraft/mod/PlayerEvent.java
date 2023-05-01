@@ -15,7 +15,6 @@ public class PlayerEvent {
     String timeStamp;
 
     public PlayerEvent(){
-        
     }
 
     public PlayerEvent(JsonNode playerEventObj) {

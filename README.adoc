@@ -200,7 +200,6 @@ $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties
 TIP: Add ` | jq` to get the json from the topic in a nice format. How to install https://stedolan.github.io/jq/[jq].
 
 .Consume the kafka-mod-chat topic
-
 [source,bash]
 ----
 $KAFKA_HOME/bin/kafka-console-consumer.sh \
@@ -210,7 +209,6 @@ $KAFKA_HOME/bin/kafka-console-consumer.sh \
 ----
 
 .Consume the kafka-mod-item-stack topic
-
 [source,bash]
 ----
 $KAFKA_HOME/bin/kafka-console-consumer.sh \
@@ -220,7 +218,6 @@ $KAFKA_HOME/bin/kafka-console-consumer.sh \
 ----
 
 .Consume the kafka-mod-entity-event topic
-
 [source,bash]
 ----
 $KAFKA_HOME/bin/kafka-console-consumer.sh \
