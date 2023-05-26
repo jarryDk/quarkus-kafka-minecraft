@@ -1,4 +1,4 @@
-package dk.jarry.minecraft.mod;
+package dk.jarry.minecraft.mod.entity;
 
 import com.fasterxml.jackson.databind.JsonNode;
 

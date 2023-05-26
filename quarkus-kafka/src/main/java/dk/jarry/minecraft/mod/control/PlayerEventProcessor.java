@@ -1,4 +1,4 @@
-package dk.jarry.minecraft.mod;
+package dk.jarry.minecraft.mod.control;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +10,8 @@ import org.eclipse.microprofile.reactive.messaging.Incoming;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import dk.jarry.minecraft.mod.entity.PlayerEvent;
 
 @ApplicationScoped
 public class PlayerEventProcessor {

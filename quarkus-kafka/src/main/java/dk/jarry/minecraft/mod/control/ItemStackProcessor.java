@@ -1,4 +1,4 @@
-package dk.jarry.minecraft.mod;
+package dk.jarry.minecraft.mod.control;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -8,6 +8,8 @@ import org.eclipse.microprofile.reactive.messaging.Outgoing;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import dk.jarry.minecraft.mod.entity.Player;
 
 @ApplicationScoped
 public class ItemStackProcessor {

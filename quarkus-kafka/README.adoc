@@ -5,3 +5,12 @@
 https://github.com/visjs/
 https://visjs.github.io/vis-graph3d/docs/graph3d/index.html
 
+
+== Get players activity via curl
+
+[source,bash]
+----
+curl -N http://localhost:8080/players
+----
+
+

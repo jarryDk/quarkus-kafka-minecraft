@@ -1,7 +1,8 @@
-package dk.jarry.minecraft.mod;
+package dk.jarry.minecraft.mod.boundary;
 
 import org.eclipse.microprofile.reactive.messaging.Channel;
 
+import dk.jarry.minecraft.mod.entity.Player;
 import io.smallrye.mutiny.Multi;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;

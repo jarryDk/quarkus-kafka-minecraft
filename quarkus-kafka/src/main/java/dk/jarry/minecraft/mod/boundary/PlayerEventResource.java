@@ -1,4 +1,4 @@
-package dk.jarry.minecraft.mod;
+package dk.jarry.minecraft.mod.boundary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,8 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 
 import com.fasterxml.jackson.databind.JsonNode;
+
+import dk.jarry.minecraft.mod.control.PlayerEventProcessor;
 
 @Path("/playerEvents")
 public class PlayerEventResource {
