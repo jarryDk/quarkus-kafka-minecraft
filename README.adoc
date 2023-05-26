@@ -106,47 +106,6 @@ The `kafkamod` send a record to Kafka when a player chat, pick up an item, craft
 }
 ----
 
-
-=== Fixing legacyClassPath
-
-Open this file `/opt/minecraft/forge/.minecraft_1.19.3-44.1.23/libraries/net/minecraftforge/forge/1.19.3-44.1.23/unix_args.txt` and append this to `-DlegacyClassPath=`
-
-NOTE: This only works for `Linux`
-
-----
-:mods/kafka-clients-3.4.0.jar:mods/lz4-java-1.8.0.jar:mods/snappy-java-1.1.8.4.jar:mods/zstd-jni-1.5.2-1.jar:mods/jackson-databind-2.14.2.jar:mods/jackson-annotations-2.14.2.jar:mods/jackson-core-2.14.2.jar
-----
-
-We do need to add the jar files to the folder `/opt/minecraft/forge/.minecraft_1.19.3-44.1.23/mods` - I use the script link:minecraft-kafka-mod/deploy.sh[deploy.sh]
-
-.Download mod dependencies
-[source,bash]
-----
-cd minecraft-kafka-mod
-./dependencies_download.sh
-----
-Source - link:minecraft-kafka-mod/dependencies_download.sh[minecraft-kafka-mod/dependencies_download.sh]
-
-
-.Deplay dependencies in mods folder of forge
-[source,bash]
-----
-cd minecraft-kafka-mod
-./deploy.sh
-----
-Source - link:minecraft-kafka-mod/deploy.sh[minecraft-kafka-mod/deploy.sh]
-
-Included in this project is my link:unix_args.txt[unix_args.txt] file.
-
-NOTE: https://github.com/holly-cummins[Holly Cummins] do not have this issue in her project https://github.com/holly-cummins/quarkus-minecraft-observability-extension where she use undertow, servlet and jaxrs!
-----
- implementation 'javax.ws.rs:javax.ws.rs-api:2.0.1'
- implementation 'org.jboss.resteasy:resteasy-jaxrs:4.0.0.Beta5'
- implementation 'org.jboss.resteasy:resteasy-undertow:4.0.0.Beta5'
- implementation 'javax.servlet:javax.servlet-api:3.0.1'
- implementation 'io.undertow:undertow-core:2.2.17.Final'
-----
-
 == Quarkus Kafka
 
 The class `ItemStackProcessor` gets records from Kafka, extract the player and send it to `players`.
@@ -322,6 +281,55 @@ $KAFKA_HOME/bin/kafka-reassign-partitions.sh \
 ----
 
 Source : https://kafka.apache.org/documentation/#basic_ops_increase_replication_factor
+
+== Fixing legacyClassPath (deprecated)
+
+After the build start using https://github.com/johnrengelman/shadow[Gradle Shadow] the need to `Fixing legacyClassPath` has `vanish into thin air`
+
+What is https://github.com/johnrengelman/shadow[Gradle Shadow] ?
+
+[quote]
+Gradle plugin for creating fat/uber JARs with support for package relocation.
+
+If you not not like to create a fat/uber JAR - please proceed...
+
+Open this file `/opt/minecraft/forge/.minecraft_1.19.4-45.0.49/libraries/net/minecraftforge/forge/1.19.4-45.0.49/unix_args.txt` and append this to `-DlegacyClassPath=`
+
+NOTE: This only works for `Linux`
+
+----
+:mods/kafka-clients-3.4.0.jar:mods/lz4-java-1.8.0.jar:mods/snappy-java-1.1.8.4.jar:mods/zstd-jni-1.5.2-1.jar:mods/jackson-databind-2.14.2.jar:mods/jackson-annotations-2.14.2.jar:mods/jackson-core-2.14.2.jar
+----
+
+We do need to add the jar files to the folder `/opt/minecraft/forge/.minecraft_1.19.4-45.0.49/mods` - I use the script link:minecraft-kafka-mod/deploy.sh[deploy.sh]
+
+.Download mod dependencies
+[source,bash]
+----
+cd minecraft-kafka-mod
+./dependencies_download.sh
+----
+Source - link:minecraft-kafka-mod/dependencies_download.sh[minecraft-kafka-mod/dependencies_download.sh]
+
+
+.Deplay dependencies in mods folder of forge
+[source,bash]
+----
+cd minecraft-kafka-mod
+./deploy.sh
+----
+Source - link:minecraft-kafka-mod/deploy.sh[minecraft-kafka-mod/deploy.sh]
+
+Included in this project is my link:unix_args.txt[unix_args.txt] file.
+
+NOTE: https://github.com/holly-cummins[Holly Cummins] do not have this issue in her project https://github.com/holly-cummins/quarkus-minecraft-observability-extension where she use undertow, servlet and jaxrs!
+----
+ implementation 'javax.ws.rs:javax.ws.rs-api:2.0.1'
+ implementation 'org.jboss.resteasy:resteasy-jaxrs:4.0.0.Beta5'
+ implementation 'org.jboss.resteasy:resteasy-undertow:4.0.0.Beta5'
+ implementation 'javax.servlet:javax.servlet-api:3.0.1'
+ implementation 'io.undertow:undertow-core:2.2.17.Final'
+----
 
 
 == Links
