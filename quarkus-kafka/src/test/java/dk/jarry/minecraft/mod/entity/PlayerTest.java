@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import dk.jarry.minecraft.mod.entity.Player;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 
