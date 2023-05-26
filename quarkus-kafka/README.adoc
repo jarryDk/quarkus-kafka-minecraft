@@ -1,9 +1,38 @@
-= QUarkus-Kafka
+= Quarkus-Kafka
 
-== Players in 3D graf (vis)
+== Build application
 
-https://github.com/visjs/
-https://visjs.github.io/vis-graph3d/docs/graph3d/index.html
+.Dev mode
+[source,bash]
+----
+mvn quarkus:dev
+----
+
+.JVM mode
+[source,bash]
+----
+mvn clean package
+----
+
+.Native mode
+[source,bash]
+----
+mvn clean package -Pnative
+----
+
+== Start application
+
+.JVM mode
+[source,bash]
+----
+java -jar target/quarkus-app/quarkus-run.jar
+----
+
+.Native mode
+[source,bash]
+----
+target/quarkus-kafka-1.0.0-SNAPSHOT-runner
+----
 
 
 == Get players activity via curl
