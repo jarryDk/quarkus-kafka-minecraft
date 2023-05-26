@@ -27,6 +27,8 @@ Inspiration: https://github.com/holly-cummins/quarkus-minecraft-observability-ex
 
 == Minecraft Kafka mod
 
+Jump to link:minecraft-kafka-mod/[code]
+
 The `kafkamod` send a record to Kafka when a player chat, pick up an item, craft an item, a new Entity join the world or a Entity leave the world.
 
 .Record sendt to Kafka when a player chat (topic : kafka-mod-chat)
@@ -107,6 +109,8 @@ The `kafkamod` send a record to Kafka when a player chat, pick up an item, craft
 ----
 
 == Quarkus Kafka
+
+Jump to link:quarkus-kafka/[code]
 
 The class `ItemStackProcessor` gets records from Kafka, extract the player and send it to `players`.
 
@@ -330,7 +334,6 @@ NOTE: https://github.com/holly-cummins[Holly Cummins] do not have this issue in 
  implementation 'javax.servlet:javax.servlet-api:3.0.1'
  implementation 'io.undertow:undertow-core:2.2.17.Final'
 ----
-
 
 == Links
 
