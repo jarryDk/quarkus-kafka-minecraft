@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
-import java.util.stream.Stream;
 
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -25,17 +24,8 @@ import dk.jarry.kafkamod.control.EntityEventSubscriber;
 import dk.jarry.kafkamod.control.EventServerChatEventSubscriber;
 import dk.jarry.kafkamod.control.PlayerEventSubscriber;
 import dk.jarry.kafkamod.control.PlayerSubscriber;
-import dk.jarry.kafkamod.control.PositionInFrontOfPlayer;
 import dk.jarry.kafkamod.control.ServerSubscriber;
-import dk.jarry.kafkamod.entity.KafkaModPlayer;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.horse.Llama;
-import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 
