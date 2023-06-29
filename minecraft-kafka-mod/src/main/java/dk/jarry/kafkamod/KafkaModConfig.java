@@ -21,6 +21,8 @@ public class KafkaModConfig {
     private static final String KAFKA_MOD_TOPIC_NUM_PARTITIONS = "kafka-mod-topic-num-partitions";
     private static final String KAFKA_MOD_TOPIC_REPLICATION_FACTOR = "kafka-mod-topic-replication-factor";
 
+    private static final String KAFKA_MOD_KAFKA_BROKERS = "kafka-mod-kakfa-brokers";
+
     private Properties serverProperties = new Properties();
 
     public KafkaModConfig() {
@@ -75,5 +77,16 @@ public class KafkaModConfig {
             }
         }
         return replicationFactor;
+    }
+
+    public String getBrokers() {
+        String brokers = "localhost:9092";
+        if (serverProperties.contains(KAFKA_MOD_KAFKA_BROKERS)) {
+            try {
+                brokers = serverProperties.getProperty(KAFKA_MOD_KAFKA_BROKERS);
+            } catch (Exception e) {
+            }
+        }
+        return brokers;
     }
 }

@@ -11,6 +11,7 @@ import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.errors.TopicExistsException;
@@ -68,6 +69,9 @@ public class KafkaMod {
             // Register EventServerChatEventSubscriber for Server chat we are interested in
             EventServerChatEventSubscriber.register();
         }
+
+        // default is localhost:9092
+        kafkaProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaModConfig.getBrokers());
 
         ServerSubscriber.register();
         PlayerSubscriber.register();
