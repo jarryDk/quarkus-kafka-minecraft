@@ -21,17 +21,20 @@ public class ServerSubscriber {
     public static void register() {
         ServerSubscriber eventSubscriber = new ServerSubscriber();
         MinecraftForge.EVENT_BUS.register(eventSubscriber);
-        LOGGER.info(eventSubscriber.getClass().getSimpleName() + " add to The core Forge EventBusses");
+        LOGGER.info("{} add to The core Forge EventBusses", //
+            eventSubscriber.getClass().getSimpleName());
     }
 
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event) {
-        LOGGER.info(KafkaMod.class.getSimpleName() + " - Server starting");
+        LOGGER.info("{} - Server starting", //
+            KafkaMod.class.getSimpleName());
     }
 
     @SubscribeEvent
     public void onServerStoppedEvent(ServerStoppedEvent event) {
-        LOGGER.info(KafkaMod.class.getSimpleName() + " - Server stopping - Graceful close connection to Kafka");
+        LOGGER.info("{} - Server stopping - Graceful close connection to Kafka", //
+            KafkaMod.class.getSimpleName());
         KafkaMod.getProducer().ifPresent( e -> e.close());
     }
 

@@ -23,7 +23,8 @@ public class EventServerChatEventSubscriber {
     public static void register() {
         EventServerChatEventSubscriber eventSubscriber = new EventServerChatEventSubscriber();
         MinecraftForge.EVENT_BUS.register(eventSubscriber);
-        LOGGER.info(eventSubscriber.getClass().getSimpleName() + " add to The core Forge EventBusses");
+        LOGGER.info("{} add to The core Forge EventBusses", //
+            eventSubscriber.getClass().getSimpleName());
     }
 
     @SubscribeEvent
@@ -39,7 +40,7 @@ public class EventServerChatEventSubscriber {
 
         KafkaMod.addRecordToTopic(key, cr.toJsonNode(), KafkaProperties.KAFKA_MOD_CHAT);
 
-        LOGGER.info("Player : " + player + " - Message : " + message);
+        LOGGER.info("Player : {} - Message : {}", player, message);
 
     }
 

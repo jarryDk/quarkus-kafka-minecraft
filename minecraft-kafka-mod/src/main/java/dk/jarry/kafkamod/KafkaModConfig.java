@@ -87,6 +87,7 @@ public class KafkaModConfig {
             } catch (Exception e) {
             }
         }
+        LOGGER.info("{} : {}", KAFKA_MOD_KAFKA_BROKERS, brokers);
         return brokers;
     }
 }

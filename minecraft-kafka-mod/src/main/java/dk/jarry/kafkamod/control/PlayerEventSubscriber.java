@@ -28,7 +28,8 @@ public class PlayerEventSubscriber {
     public static void register() {
         PlayerEventSubscriber eventSubscriber = new PlayerEventSubscriber();
         MinecraftForge.EVENT_BUS.register(eventSubscriber);
-        LOGGER.info(eventSubscriber.getClass().getSimpleName() + " add to The core Forge EventBusses");
+        LOGGER.info("{} add to The core Forge EventBusses", //
+            eventSubscriber.getClass().getSimpleName());
     }
 
     @SubscribeEvent
@@ -41,8 +42,8 @@ public class PlayerEventSubscriber {
 
         KafkaMod.addRecordToTopic(key, playerEventRecord.toJsonNode(), KafkaProperties.KAFKA_MOD_PLAYER_EVENT);
 
-        LOGGER.info(PlayerEventSubscriber.class.getSimpleName() + " - Client connected: "
-                + playerEventRecord.getPlayer());
+        LOGGER.info("{} - Client connected: {}", //
+            PlayerEventSubscriber.class.getSimpleName(), playerEventRecord.getPlayer());
 
     }
 
@@ -56,15 +57,15 @@ public class PlayerEventSubscriber {
 
         KafkaMod.addRecordToTopic(key, playerEventRecord.toJsonNode(), KafkaProperties.KAFKA_MOD_PLAYER_EVENT);
 
-        LOGGER.info(PlayerEventSubscriber.class.getSimpleName() + " - Client disconnected: "
-                + playerEventRecord.getPlayer());
+        LOGGER.info("{} - Client disconnected: {}", //
+            PlayerEventSubscriber.class.getSimpleName(), playerEventRecord.getPlayer());
     }
 
     @SubscribeEvent
     public void onPlayerChangedDimensionEvent(PlayerEvent.PlayerChangedDimensionEvent event) {
         Player player = event.getEntity();
         KafkaModPlayer pl = new KafkaModPlayer(player);
-        LOGGER.info("ChangedDimension - " + pl);
+        LOGGER.info("ChangedDimension - {}", pl);
 
         KafkaMod.playerInGame.values().stream().forEach(p -> {
             p.displayClientMessage(Component.literal("ChangedDimension of player - " + pl), true);
@@ -75,7 +76,7 @@ public class PlayerEventSubscriber {
     public void onPlayerRespawnEvent(PlayerEvent.PlayerRespawnEvent event) {
         Player player = event.getEntity();
         KafkaModPlayer pl = new KafkaModPlayer(player);
-        LOGGER.info("Respawn - " + pl);
+        LOGGER.info("Respawn - {}", pl);
 
         KafkaMod.playerInGame.values().stream().forEach(p -> {
             p.displayClientMessage(Component.literal("Respawn of player - " + pl), true);
@@ -92,7 +93,8 @@ public class PlayerEventSubscriber {
         KafkaModPlayer kmPlayer = new KafkaModPlayer(player);
 
         ItemStack stack = event.getCrafting();
-        LOGGER.info("Component Crafted : " + stack.getDisplayName().getString());
+        LOGGER.info("Component Crafted : {}", //
+                stack.getDisplayName().getString());
 
         ItemStackRecord cr = new ItemStackRecord(kmPlayer, "Crafted", stack);
         String key = kmPlayer.getName();
@@ -108,7 +110,8 @@ public class PlayerEventSubscriber {
         KafkaModPlayer kmPlayer = new KafkaModPlayer(player);
 
         ItemStack stack = event.getStack();
-        LOGGER.info("Component Pickup : " + stack.getDisplayName().getString());
+        LOGGER.info("Component Pickup : {}", //
+                stack.getDisplayName().getString());
 
         ItemStackRecord cr = new ItemStackRecord(kmPlayer, "Pickup", stack);
         String key = kmPlayer.getName();

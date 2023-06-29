@@ -48,6 +48,16 @@ public class KafkaMod {
 
     public KafkaMod() {
 
+        LOGGER.info("Get ready to rumble");
+
+        // default is localhost:9092
+        kafkaProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaModConfig.getBrokers());
+
+        try {
+            setProducer();
+        } catch (Exception e) {
+        }
+
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
@@ -69,9 +79,6 @@ public class KafkaMod {
             // Register EventServerChatEventSubscriber for Server chat we are interested in
             EventServerChatEventSubscriber.register();
         }
-
-        // default is localhost:9092
-        kafkaProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaModConfig.getBrokers());
 
         ServerSubscriber.register();
         PlayerSubscriber.register();
@@ -102,7 +109,8 @@ public class KafkaMod {
 
     public static Optional<Producer<String, JsonNode>> getProducer() {
         if (producer == null) {
-            LOGGER.warn("Someone did not start Kafka ...");
+            LOGGER.warn("Someone did not start Kafka ... {}",
+                    kafkaProperties.getProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG));
             if (producerConnectionAttempts % 10 == 0) {
                 producerConnectionAttempts = 0;
                 setProducer();
@@ -121,8 +129,8 @@ public class KafkaMod {
     }
 
     private void createTopic(final String topic) {
-        LOGGER.info("Creating topic if needed - " + topic + " - numPartitions:" + kafkaModConfig.getTopicNumPartitions()
-                + ", replicationFactor:" + kafkaModConfig.getTopicReplicationFactor());
+        LOGGER.info("Creating topic if needed - {} - numPartitions: {}, replicationFactor: {}", //
+                topic, kafkaModConfig.getTopicNumPartitions(), kafkaModConfig.getTopicReplicationFactor());
         Optional<Integer> numPartitions = Optional.of(kafkaModConfig.getTopicNumPartitions()); // Default is 1
         Optional<Short> replicationFactor = Optional.of(kafkaModConfig.getTopicReplicationFactor()); // Default is 1
         final NewTopic newTopic = new NewTopic(topic, numPartitions, replicationFactor);

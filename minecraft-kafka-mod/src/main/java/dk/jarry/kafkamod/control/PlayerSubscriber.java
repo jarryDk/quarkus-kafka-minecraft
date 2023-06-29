@@ -22,7 +22,8 @@ public class PlayerSubscriber {
     public static void register() {
         PlayerSubscriber eventSubscriber = new PlayerSubscriber();
         MinecraftForge.EVENT_BUS.register(eventSubscriber);
-        LOGGER.info(eventSubscriber.getClass().getSimpleName() + " add to The core Forge EventBusses");
+        LOGGER.info("{} add to The core Forge EventBusses", //
+            eventSubscriber.getClass().getSimpleName());
     }
 
     @SubscribeEvent
@@ -30,7 +31,8 @@ public class PlayerSubscriber {
         Player player = event.getEntity();
         KafkaModPlayer kmPlayer = new KafkaModPlayer(player);
         ItemStack stack = event.getOriginal();
-        LOGGER.info("Component Destroy : " + stack.getDisplayName().getString() + " " + kmPlayer);
+        LOGGER.info("Component Destroy : {} {}", //
+                stack.getDisplayName().getString(), kmPlayer);
     }
 
 }

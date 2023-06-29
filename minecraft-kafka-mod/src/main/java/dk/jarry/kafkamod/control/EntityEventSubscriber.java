@@ -23,7 +23,8 @@ public class EntityEventSubscriber {
     public static void register(){
         EntityEventSubscriber eventSubscriber = new EntityEventSubscriber();
         MinecraftForge.EVENT_BUS.register(eventSubscriber);
-        LOGGER.info(eventSubscriber.getClass().getSimpleName() + " add to The core Forge EventBusses");
+        LOGGER.info("{} add to The core Forge EventBusses", //
+            eventSubscriber.getClass().getSimpleName());
     }
 
     @SubscribeEvent
