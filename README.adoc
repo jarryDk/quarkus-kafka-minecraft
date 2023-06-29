@@ -16,8 +16,6 @@ The Minecraft mod `kafkamod` might be a bit to chatty, but it is nice doing deve
 
 TIP: Start Kafka before starting the Minecraft server.
 
-NOTE: I have some issues with `legacyClassPath` and fix it by running the `kafkamod` directly on a forge Minecraft server.
-
 Inspiration: https://github.com/holly-cummins/quarkus-minecraft-observability-extension
 
 == Requeriments
@@ -27,86 +25,13 @@ Inspiration: https://github.com/holly-cummins/quarkus-minecraft-observability-ex
 
 == Minecraft Kafka mod
 
+Minecraft Kafka mod use Apache Kafka to send event about
+
+- Chat
+- Entities entring or leaving the world
+- Entities crafted or picked up by a player
+
 Jump to link:minecraft-kafka-mod/[code]
-
-The `kafkamod` send a record to Kafka when a player chat, pick up an item, craft an item, a new Entity join the world or a Entity leave the world.
-
-.Record sendt to Kafka when a player chat (topic : kafka-mod-chat)
-
-[source,json]
-----
-{
-    "player": {
-        "ipAddress": "127.0.0.1",
-        "name": "jarry_dk",
-        "x": -1.3881068355791462,
-        "y": 67.0,
-        "z": 12.062554759895784
-    },
-    "message": "From MineCraft"
-}
-----
-
-.Record sendt to Kafka when crafting an item (topic : kafka-mod-item-stack)
-
-[source,json]
-----
-{
-    "displayName": "Spruce Planks",
-    "player": {
-        "name": "jarry_dk",
-        "ipAddress": "127.0.0.1",
-        "x": -1.3881068355791462,
-        "y": 67.0,
-        "z": 12.062554759895784
-    },
-    "typeOfEvent": "Crafted"
-}
-----
-
-.Record sendt to Kafka when picking up an item (topic : kafka-mod-item-stack)
-
-[source,json]
-----
-{
-  "displayName": "Stick",
-  "player": {
-    "ipAddress": "127.0.0.1",
-    "name": "jarry_dk",
-    "x": -112.14733596516719,
-    "y": -34.89135238400638,
-    "z": -34.89135238400638
-  },
-  "typeOfEvent": "Pickup"
-}
-----
-
-.Record sendt to Kafka when an Entity join the world (topic : kafka-mod-entity-event)
-
-[source,json]
-----
-{
-  "event": "EntityJoinLevelEvent",
-  "name": "Falling Block",
-  "x": -130.5,
-  "y": 62.0,
-  "z": 191.5
-}
-
-----
-
-.Record sendt to Kafka when an Entity leave the world (topic : kafka-mod-entity-event)
-
-[source,json]
-----
-{
-  "event": "EntityLeaveLevelEvent",
-  "name": "Falling Block",
-  "x": -130.5,
-  "y": 62.0,
-  "z": 191.5
-}
-----
 
 == Quarkus Kafka
 
@@ -143,7 +68,7 @@ image::images/show_player_in_browser.png[]
 
 [source,bash]
 ----
-export KAFKA_HOME=/opt/apache/kafka/kafka_2.13-3.4.0
+export KAFKA_HOME=/opt/apache/kafka/kafka_2.13-3.5.0
 ----
 
 .Start Zookeeper
@@ -286,59 +211,11 @@ $KAFKA_HOME/bin/kafka-reassign-partitions.sh \
 
 Source : https://kafka.apache.org/documentation/#basic_ops_increase_replication_factor
 
-== Fixing legacyClassPath (deprecated)
-
-After the build start using https://github.com/johnrengelman/shadow[Gradle Shadow] the need to `Fixing legacyClassPath` has `vanish into thin air`
-
-What is https://github.com/johnrengelman/shadow[Gradle Shadow] ?
-
-[quote]
-Gradle plugin for creating fat/uber JARs with support for package relocation.
-
-If you not not like to create a fat/uber JAR - please proceed...
-
-Open this file `/opt/minecraft/forge/.minecraft_1.19.4-45.0.49/libraries/net/minecraftforge/forge/1.19.4-45.0.49/unix_args.txt` and append this to `-DlegacyClassPath=`
-
-NOTE: This only works for `Linux`
-
-----
-:mods/kafka-clients-3.4.0.jar:mods/lz4-java-1.8.0.jar:mods/snappy-java-1.1.8.4.jar:mods/zstd-jni-1.5.2-1.jar:mods/jackson-databind-2.14.2.jar:mods/jackson-annotations-2.14.2.jar:mods/jackson-core-2.14.2.jar
-----
-
-We do need to add the jar files to the folder `/opt/minecraft/forge/.minecraft_1.19.4-45.0.49/mods` - I use the script link:minecraft-kafka-mod/deploy.sh[deploy.sh]
-
-.Download mod dependencies
-[source,bash]
-----
-cd minecraft-kafka-mod
-./dependencies_download.sh
-----
-Source - link:minecraft-kafka-mod/dependencies_download.sh[minecraft-kafka-mod/dependencies_download.sh]
-
-
-.Deplay dependencies in mods folder of forge
-[source,bash]
-----
-cd minecraft-kafka-mod
-./deploy.sh
-----
-Source - link:minecraft-kafka-mod/deploy.sh[minecraft-kafka-mod/deploy.sh]
-
-Included in this project is my link:unix_args.txt[unix_args.txt] file.
-
-NOTE: https://github.com/holly-cummins[Holly Cummins] do not have this issue in her project https://github.com/holly-cummins/quarkus-minecraft-observability-extension where she use undertow, servlet and jaxrs!
-----
- implementation 'javax.ws.rs:javax.ws.rs-api:2.0.1'
- implementation 'org.jboss.resteasy:resteasy-jaxrs:4.0.0.Beta5'
- implementation 'org.jboss.resteasy:resteasy-undertow:4.0.0.Beta5'
- implementation 'javax.servlet:javax.servlet-api:3.0.1'
- implementation 'io.undertow:undertow-core:2.2.17.Final'
-----
-
 == Links
 
 - https://files.minecraftforge.net/net/minecraftforge/forge/[Downloads for Minecraft Forge]
 - https://docs.minecraftforge.net/en/latest/[MinecraftForge Documentation]
+- https://github.com/MinecraftForge/MinecraftForge[MinecraftForge]
 - https://nekoyue.github.io/ForgeJavaDocs-NG/javadoc/1.19.1/index.html
 - https://quarkus.io/guides/kafka-reactive-getting-started[Getting Started to SmallRye Reactive Messaging with Apache Kafka - Quarkus]
 - https://threejs.org

@@ -5,7 +5,7 @@ copied below.
 
 Homepage: http://minecraftforge.net/
           https://github.com/MinecraftForge/MinecraftForge
-          
+
 
 A note on authorship:
 All source artifacts are property of their original author, with

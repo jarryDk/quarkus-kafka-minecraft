@@ -1,7 +1,7 @@
 plugins {
     id 'eclipse'
     id 'maven-publish'
-    id 'net.minecraftforge.gradle' version '5.1.+'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'java'
 }
@@ -45,7 +45,7 @@ configurations {
 
 dependencies {
 
-    minecraft 'net.minecraftforge:forge:1.20.1-47.0.19'
+    minecraft 'net.minecraftforge:forge:1.20.1-47.0.35'
 
     implementation 'org.apache.kafka:kafka-clients:3.5.0'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
