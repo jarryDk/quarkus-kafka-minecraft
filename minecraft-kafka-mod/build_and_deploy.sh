@@ -2,4 +2,4 @@
 
 ./gradlew build
 
-./deploy_light.sh
+./deploy.sh

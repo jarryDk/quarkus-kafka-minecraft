@@ -1,0 +1,129 @@
+= Minecraft Kafka mod
+
+This mod use Apache Kafka to send events about
+
+- Chat
+- Entities entring or leaving the world
+- Entities crafted or picked up by a player
+
+.Minecraft version
+----
+1.20.1
+----
+
+.MinecraftForge version
+----
+1.20.1-47.0.35
+----
+
+.Kafka version this mod is using
+----
+3.5.0
+----
+
+.build this mod
+[source,bash]
+----
+./gradlew build
+----
+
+.Use of shadowJar in build.gradle
+The gradle build use `shadowJar` to inlude all dependencies into our `kafka-0.3.jar` file. 
+Included is `org.apache.kafka:kafka-clients:3.5.0` and `com.fasterxml.jackson.core:jackson-databind:2.15.2`.
+
+.deploy this mod
+[source,bash]
+----
+#!/bin/bash
+FORGE_SERVER_VERSION=${VERSION_MINECRAFT_FORGE_SERVER:=1.20.1-47.0.35}
+FORGE_SERVER_LOCATION="/opt/minecraft/forge/.minecraft_$FORGE_SERVER_VERSION"
+FORGE_MOD_FOLDER="$FORGE_SERVER_LOCATION/mods"
+if [ ! -d $FORGE_MOD_FOLDER ]; then
+    mkdir -p $FORGE_MOD_FOLDER
+    echo "Forge folder created -> $FORGE_MOD_FOLDER"
+else
+    echo "Forge folder was present -> $FORGE_MOD_FOLDER"
+fi
+cp -v build/libs/kafka-0.3.jar $FORGE_MOD_FOLDER/kafka-0.3.jar
+----
+
+
+.Record sendt to Kafka when a player chat (topic : kafka-mod-chat)
+[source,json]
+----
+{
+    "player": {
+        "ipAddress": "127.0.0.1",
+        "name": "jarry_dk",
+        "x": -1.3881068355791462,
+        "y": 67.0,
+        "z": 12.062554759895784
+    },
+    "message": "From MineCraft"
+}
+----
+
+.Record sendt to Kafka when crafting an item (topic : kafka-mod-item-stack)
+[source,json]
+----
+{
+    "displayName": "Spruce Planks",
+    "player": {
+        "name": "jarry_dk",
+        "ipAddress": "127.0.0.1",
+        "x": -1.3881068355791462,
+        "y": 67.0,
+        "z": 12.062554759895784
+    },
+    "typeOfEvent": "Crafted"
+}
+----
+
+.Record sendt to Kafka when picking up an item (topic : kafka-mod-item-stack)
+
+[source,json]
+----
+{
+  "displayName": "Stick",
+  "player": {
+    "ipAddress": "127.0.0.1",
+    "name": "jarry_dk",
+    "x": -112.14733596516719,
+    "y": -34.89135238400638,
+    "z": -34.89135238400638
+  },
+  "typeOfEvent": "Pickup"
+}
+----
+
+.Record sendt to Kafka when an Entity join the world (topic : kafka-mod-entity-event)
+
+[source,json]
+----
+{
+  "event": "EntityJoinLevelEvent",
+  "name": "Falling Block",
+  "x": -130.5,
+  "y": 62.0,
+  "z": 191.5
+}
+
+----
+
+.Record sendt to Kafka when an Entity leave the world (topic : kafka-mod-entity-event)
+
+[source,json]
+----
+{
+  "event": "EntityLeaveLevelEvent",
+  "name": "Falling Block",
+  "x": -130.5,
+  "y": 62.0,
+  "z": 191.5
+}
+----
+
+
+== Source installation information for modders
+
+The official https://github.com/MinecraftForge/MinecraftForge/tree/1.20.x/mdk[README.txt]
