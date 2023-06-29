@@ -1,0 +1,19 @@
+= Container
+
+Layer for base images
+ - fedora-minimal:38
+ - docker.io/jarrydk/fedora-minimal-updates:38
+ - docker.io/jarrydk/fedora-minimal-adoptium-openjdk:17
+
+Source : https://github.com/jarryDk/containers/
+
+[source,bash]
+----
+podman pull docker.io/jarrydk/fedora-minimal-kafka:3.5.0
+----
+
+[source,bash]
+----
+podman pull docker.io/jarrydk/fedora-minimal-zookeeper-kafka:3.5.0
+----
+
