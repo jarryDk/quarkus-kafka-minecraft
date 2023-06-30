@@ -9,6 +9,7 @@ public class EntityEvent {
     double z;
     String event;
     String name;
+    String entityPackage;
 
     public EntityEvent(JsonNode entityEventOjb) {
         if (entityEventOjb.has("x")) {
@@ -25,6 +26,9 @@ public class EntityEvent {
         }
         if (entityEventOjb.has("name")) {
             this.name = entityEventOjb.get("name").asText();
+        }
+        if (entityEventOjb.has("entityPackage")) {
+            this.entityPackage = entityEventOjb.get("entityPackage").asText();
         }
     }
 
@@ -46,6 +50,10 @@ public class EntityEvent {
 
     public String getName() {
         return name;
+    }
+
+    public String getEntityPackage(){
+        return entityPackage;
     }
 
 }

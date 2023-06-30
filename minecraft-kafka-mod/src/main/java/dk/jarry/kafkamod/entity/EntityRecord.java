@@ -29,6 +29,14 @@ public class EntityRecord extends Location {
         return event.getClass().getSimpleName();
     }
 
+    public int getEntityId(){
+        return entity.getId();
+    }
+
+    public String getEntityPackage(){
+        return entity.getClass().getPackage().getName();
+    }
+
     @Override
     public String toString() {
         String action = "";

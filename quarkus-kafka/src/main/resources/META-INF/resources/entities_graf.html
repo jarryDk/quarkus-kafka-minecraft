@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Use Kafka to track players in MineCraft - Players with Physics</title>
+    <title>Use Kafka to track players in MineCraft - Entities with Physics</title>
     <script src="lib/three.min.js"></script>
     <script src="lib/enable3d/enable3d.ammoPhysics.0.25.2.min.js"></script>
     <script src="lib/OrbitControls.js"></script>
@@ -46,8 +46,6 @@
         const { AmmoPhysics, PhysicsLoader } = ENABLE3D
 
         const player = [];
-        player.push({ x:50.01078183938167,y:62.30531325613159,z:3.4366749997460855});
-        player.push({ x:66.67874520838761,y:62,z:9.675782539345906});
 
         // scene
         const scene = new THREE.Scene()
@@ -99,7 +97,7 @@
                     const geometry = new THREE.BoxBufferGeometry();;
                     const material = new THREE.MeshLambertMaterial({ color: 0x00ff00 });
                     const cube = new THREE.Mesh(geometry, material);
-                    cube.position.set( p.x , p.y, p.z);
+                    cube.position.set(p.x , p.y, p.z);
                     scene.add(cube);
                 }
             );
@@ -119,15 +117,44 @@
         PhysicsLoader('/lib/ammo/kripken', () => MainScene())
         console.log(`three.js version "${THREE.REVISION}"`)
 
-        var source = new EventSource("/players");
+        var source = new EventSource("/eventEntities");
         source.onmessage = (event) => {
-            console.log("event ... " + event);
+            // console.log("event ... ", event);
             var json = JSON.parse(event.data);
-            console.log(json);
-            player.push({ x:json.x,y:json.y,z:json.z});
+            player.push({
+                x:json.x,
+                y:json.y,
+                z:json.z,
+                entityPackage:json.entityPackage});
 
-            const geometry = new THREE.BoxBufferGeometry();;
-            const material = new THREE.MeshLambertMaterial({ color: 0xFF0000 });
+            const geometry = new THREE.BoxBufferGeometry();
+
+            // default color - Chartreuse (Green)
+            var material = new THREE.MeshLambertMaterial({ color: 0x7FFF00 });
+            if(json.entityPackage == "net.minecraft.world.entity.animal"){
+                // DarkBlue
+                material = new THREE.MeshLambertMaterial({ color: 0x00008B });
+            } else if(json.entityPackage == "net.minecraft.world.entity.ambient"){
+                // Cyan
+                material = new THREE.MeshLambertMaterial({ color: 0x00FFFF });
+            }  else if(json.entityPackage == "net.minecraft.world.entity.animal.axolotl"){
+                // DarkOliveGreen
+                material = new THREE.MeshLambertMaterial({ color: 0x556B2F });
+            } else if(json.entityPackage == "net.minecraft.world.entity.vehicle"){
+                // DeepPink
+                material = new THREE.MeshLambertMaterial({ color: 0xFF1493 });
+            } else if(json.entityPackage == "net.minecraft.world.entity.monster"){
+                // Fuchsia
+                material = new THREE.MeshLambertMaterial({ color: 0xFF00FF });
+            } else if(json.entityPackage == "net.minecraft.world.entity.item"){
+                // Orange
+                material = new THREE.MeshLambertMaterial({ color: 0xFFA500 });
+            }  else if(json.entityPackage == "net.minecraft.world.entity"){
+                // Red
+                material = new THREE.MeshLambertMaterial({ color: 0xFF0000 });
+            } else {
+                console.log("entityPackage '" +json.entityPackage + "' do not have a color yet.")
+            }
             const cube = new THREE.Mesh(geometry, material);
             cube.position.set( json.x , json.y, json.z);
             scene.add(cube);
