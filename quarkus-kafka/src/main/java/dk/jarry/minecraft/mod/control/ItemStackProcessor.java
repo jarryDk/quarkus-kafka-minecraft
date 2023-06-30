@@ -17,13 +17,13 @@ public class ItemStackProcessor {
     @Inject
     ObjectMapper objectMapper;
 
-    @Incoming("item-stack")
+    @Incoming("kafka-mod-item-stack")
     @Outgoing("players")
-    public Player process(String itemStack) throws InterruptedException {
+    public Player process(String record) throws InterruptedException {
 
         Player player = null;
         try {
-            JsonNode itemStackObj = objectMapper.readTree(itemStack);
+            JsonNode itemStackObj = objectMapper.readTree(record);
             JsonNode playerObj = itemStackObj.get("player");
             player = new Player(playerObj);
         } catch (Exception e) {
@@ -32,5 +32,4 @@ public class ItemStackProcessor {
         return player;
     }
 
-    
 }

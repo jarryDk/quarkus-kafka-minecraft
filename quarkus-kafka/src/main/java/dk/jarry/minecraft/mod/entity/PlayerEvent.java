@@ -76,8 +76,12 @@ public class PlayerEvent {
         return timeStamp;
     }
 
+    public Player getPlayer(){
+        return new Player(x,y,z,ipAddress,name);
+    }
+
     public JsonNode toJsonNode() {
-        return  new ObjectMapper().valueToTree(this);
+        return new ObjectMapper().valueToTree(this);
     }
 
     @Override
@@ -147,7 +151,5 @@ public class PlayerEvent {
             return false;
         return true;
     }
-
-    
 
 }

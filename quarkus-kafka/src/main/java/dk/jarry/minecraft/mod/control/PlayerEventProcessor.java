@@ -3,15 +3,16 @@ package dk.jarry.minecraft.mod.control;
 import java.util.HashMap;
 import java.util.Map;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-
 import org.eclipse.microprofile.reactive.messaging.Incoming;
+import org.eclipse.microprofile.reactive.messaging.Outgoing;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import dk.jarry.minecraft.mod.entity.Player;
 import dk.jarry.minecraft.mod.entity.PlayerEvent;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class PlayerEventProcessor {
@@ -30,13 +31,13 @@ public class PlayerEventProcessor {
         return activePlayerEvents;
     }
 
-    @Incoming("player-event")
-    // @Outgoing("players")
-    public void process(String playerEventString) throws InterruptedException {
+    @Incoming("kafka-mod-player-event")
+    @Outgoing("players")
+    public Player process(String record) throws InterruptedException {
 
         PlayerEvent playerEvent = null;
         try {
-            JsonNode playerEventObj = objectMapper.readTree(playerEventString);
+            JsonNode playerEventObj = objectMapper.readTree(record);
             playerEvent = new PlayerEvent(playerEventObj);
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,7 +55,8 @@ public class PlayerEventProcessor {
             }
         }
 
-        // return playerEvent;
+        return playerEvent.getPlayer();
+
     }
 
 }

@@ -10,41 +10,52 @@ public class Player {
     String ipAddress;
     String name;
 
-    public Player(){
+    public Player() {
     }
 
-    public Player(JsonNode playerObj){
-        if (playerObj.has("x")){
+    public Player(double x,
+            double y,
+            double z,
+            String ipAddress,
+            String name) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.ipAddress = ipAddress;
+        this.name = name;
+    }
+
+    public Player(JsonNode playerObj) {
+        if (playerObj.has("x")) {
             this.x = playerObj.get("x").doubleValue();
         }
-        if (playerObj.has("y")){
+        if (playerObj.has("y")) {
             this.y = playerObj.get("y").doubleValue();
         }
-        if (playerObj.has("z")){
+        if (playerObj.has("z")) {
             this.z = playerObj.get("z").doubleValue();
         }
-        if (playerObj.has("ipAddress")){
+        if (playerObj.has("ipAddress")) {
             this.ipAddress = playerObj.get("ipAddress").asText();
         }
-        if (playerObj.has("name")){
+        if (playerObj.has("name")) {
             this.name = playerObj.get("name").asText();
         }
     }
 
-
-    public double getX(){
+    public double getX() {
         return x;
     }
 
-    public double getY(){
+    public double getY() {
         return y;
     }
 
-    public double getZ(){
+    public double getZ() {
         return z;
     }
 
-    public String getIpAddress(){
+    public String getIpAddress() {
         return ipAddress;
     }
 

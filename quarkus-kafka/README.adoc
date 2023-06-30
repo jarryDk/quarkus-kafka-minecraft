@@ -35,11 +35,23 @@ target/quarkus-kafka-1.0.0-SNAPSHOT-runner
 ----
 
 
-== Get players activity via curl
+== Get Players activity via curl
 
 [source,bash]
 ----
 curl -N http://localhost:8080/players
 ----
 
+== Get Chat activity via curl
 
+[source,bash]
+----
+curl -N http://localhost:8080/chats
+----
+
+== Get EntityEvent activity via curl
+
+[source,bash]
+----
+curl -N http://localhost:8080/eventEntities
+----

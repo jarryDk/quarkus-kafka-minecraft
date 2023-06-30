@@ -114,6 +114,15 @@ $KAFKA_HOME/bin/kafka-console-consumer.sh \
     --from-beginning
 ----
 
+.Consume the kafka-mod-player-event topic
+[source,bash]
+----
+$KAFKA_HOME/bin/kafka-console-consumer.sh \
+    --bootstrap-server localhost:9092 \
+    --topic kafka-mod-player-event \
+    --from-beginning
+----
+
 .Create the topic kafka-mod-entity-event (if needed)
 
 [source,bash]
