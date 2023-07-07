@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.Set;
 
 import org.slf4j.Logger;
 
@@ -37,6 +38,7 @@ public class KafkaModConfig {
         } catch (IOException e) {
             LOGGER.error("Not able to load server.properties .. strange !", e);
         }
+        LOGGER.info("Config loaded from server.properties");
     }
 
     public Boolean isPlayerEventEnabled() {
@@ -58,36 +60,17 @@ public class KafkaModConfig {
     }
 
     public int getTopicNumPartitions() {
-        Integer numPartitions = 1;
-        if (serverProperties.contains(KAFKA_MOD_TOPIC_NUM_PARTITIONS)) {
-            try {
-                numPartitions = Integer.parseInt(serverProperties.getProperty(KAFKA_MOD_TOPIC_NUM_PARTITIONS));
-            } catch (Exception e) {
-            }
-        }
-        return numPartitions;
+        return Integer.parseInt( //
+            serverProperties.getProperty(KAFKA_MOD_TOPIC_NUM_PARTITIONS, "1"));
     }
 
     public Short getTopicReplicationFactor() {
-        Short replicationFactor = 1;
-        if (serverProperties.contains(KAFKA_MOD_TOPIC_REPLICATION_FACTOR)) {
-            try {
-                replicationFactor = Short.parseShort(serverProperties.getProperty(KAFKA_MOD_TOPIC_REPLICATION_FACTOR));
-            } catch (Exception e) {
-            }
-        }
-        return replicationFactor;
+       return Short.parseShort( //
+            serverProperties.getProperty(KAFKA_MOD_TOPIC_REPLICATION_FACTOR, "1"));
     }
 
     public String getBrokers() {
-        String brokers = "localhost:9092";
-        if (serverProperties.contains(KAFKA_MOD_KAFKA_BROKERS)) {
-            try {
-                brokers = serverProperties.getProperty(KAFKA_MOD_KAFKA_BROKERS);
-            } catch (Exception e) {
-            }
-        }
-        LOGGER.info("{} : {}", KAFKA_MOD_KAFKA_BROKERS, brokers);
-        return brokers;
+        return serverProperties.getProperty( //
+            KAFKA_MOD_KAFKA_BROKERS,"localhost:9092");
     }
 }

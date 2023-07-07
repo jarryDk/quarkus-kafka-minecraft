@@ -1,0 +1,67 @@
+version: '2'
+
+services:
+
+  kafka-zookeeper:
+    image: docker.io/jarrydk/fedora-minimal-kafka-zookeeper:3.5.0
+    environment:
+      KAFKA_DATA_DIR: "/var/kafka/data"
+    ports:
+      - "127.0.2.10:2181:2181"
+    volumes:
+      - kafka-zookeeper-data:/var/kafka/data
+    networks:
+      default:
+        aliases:
+          - kafka-zookeeper.local
+
+  kafka-server-broker1:
+    image: docker.io/jarrydk/fedora-minimal-kafka:3.5.0
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: "kafka-zookeeper:2181"
+      KAFKA_LISTENERS: "PLAINTEXT://:9092,INTERNAL_PLAINTEXT://:9094"
+      KAFKA_LISTENER_SECURITY_PROTOCAL_MAP: "PLAINTEXT:PLAINTEXT,INTERNAL_PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL_PLAINTEXT"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://broker1.jarry.dk:9092,INTERNAL_PLAINTEXT://:9094"
+      KAFKA_BROKER_ID: 1
+      KAFKA_LOG_DIRS: /var/kafka/data
+    ports:
+      - "127.0.2.21:9092:9092"
+    volumes:
+      - kafka-server-broker1-data:/var/kafka/data
+    networks:
+      default:
+        aliases:
+          - kafka-server-broker1.local
+    depends_on:
+      - kafka-zookeeper
+
+  kafka-server-broker2:
+    image: docker.io/jarrydk/fedora-minimal-kafka:3.5.0
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: "kafka-zookeeper:2181"
+      KAFKA_LISTENERS: "PLAINTEXT://:9093,INTERNAL_PLAINTEXT://:9094"
+      KAFKA_LISTENER_SECURITY_PROTOCAL_MAP: "PLAINTEXT:PLAINTEXT,INTERNAL_PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL"
+      KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL_PLAINTEXT"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://broker2.jarry.dk:9093,INTERNAL_PLAINTEXT://:9094"
+      KAFKA_BROKER_ID: 2
+      KAFKA_LOG_DIRS: /var/kafka/data
+    ports:
+      - "127.0.2.22:9093:9093"
+    volumes:
+      - kafka-server-broker2-data:/var/kafka/data
+    networks:
+      default:
+        aliases:
+          - kafka-server-broker2.local
+    depends_on:
+      - kafka-zookeeper
+
+networks:
+ default:
+     name: minecraft-net
+
+volumes:
+  kafka-zookeeper-data:
+  kafka-server-broker1-data:
+  kafka-server-broker2-data:
