@@ -28,7 +28,7 @@ This mod use Apache Kafka to send events about
 ----
 
 .Use of shadowJar in build.gradle
-The gradle build use `shadowJar` to inlude all dependencies into our `kafka-0.3.jar` file. 
+The gradle build use `shadowJar` to inlude all dependencies into our `kafka-1.0.0.jar` file. 
 Included is `org.apache.kafka:kafka-clients:3.5.0` and `com.fasterxml.jackson.core:jackson-databind:2.15.2`.
 
 .deploy this mod
@@ -44,7 +44,7 @@ if [ ! -d $FORGE_MOD_FOLDER ]; then
 else
     echo "Forge folder was present -> $FORGE_MOD_FOLDER"
 fi
-cp -v build/libs/kafka-0.3.jar $FORGE_MOD_FOLDER/kafka-0.3.jar
+cp -v build/libs/kafka-1.0.0.jar $FORGE_MOD_FOLDER/kafka-1.0.0.jar
 ----
 
 
