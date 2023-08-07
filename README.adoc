@@ -85,10 +85,10 @@ public static void addRecordToTopic(String key, JsonNode record, String topic) {
                             e.printStackTrace();
                         } else {
                             LOGGER.debug(
-                                    "Produced record to topic %s partition [%d] @ offset %d%n",
-                                    m.topic(),
-                                    m.partition(),
-                                    m.offset());
+                                "Produced record to topic %s partition [%d] @ offset %d%n",
+                                m.topic(),
+                                m.partition(),
+                                m.offset());
                         }
                     }
                 }
@@ -106,7 +106,7 @@ public JsonNode toJsonNode() {
 }
 ----
 
-=== Build and package
+=== Build and deploy
 
 Buildin the `link:minecraft-kafka-mod/[kafkamod]` mod is done with
 
@@ -118,13 +118,20 @@ cd minecraft-kafka-mod
 
 Package the `link:minecraft-kafka-mod/[kafkamod]` mod is done with the use of `shadowJar` in `build.gradle`
 ----
-The gradle build use `shadowJar` to inlude all dependencies into our `kafka-1.0.0.jar` file.
+The gradle build use `shadowJar` to inlude all dependencies into our `kafka-1.0.1.jar` file.
 Included is `org.apache.kafka:kafka-clients:3.5.0` and `com.fasterxml.jackson.core:jackson-databind:2.15.2`.
 ----
 
 An alternative to use `shadowJar` is to add the dependencies (five jar-files) manually one my one in the section `-DlegacyClassPath=` in the file
 
     /opt/minecraft/forge/.minecraft_1.20.1-47.0.35/libraries/net/minecraftforge/forge/1.20.1-47.0.35/unix_args.txt
+
+
+I use link:minecraft-kafka-mod/build_and_deploy.sh[minecraft-kafka-mod/build_and_deploy.sh] to deploy `minecraftforge`. The
+script build the binary and deploy to the folder `$FORGE_SERVER_LOCATION/mods/kafka-1.0.1.jar` - no housekeep when
+doing a bump of version.
+
+
 
 == Quarkus Kafka
 
