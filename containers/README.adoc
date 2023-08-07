@@ -17,3 +17,8 @@ podman pull docker.io/jarrydk/fedora-minimal-kafka:3.5.0
 podman pull docker.io/jarrydk/fedora-minimal-zookeeper-kafka:3.5.0
 ----
 
+.Start zookeeper and tree brokers
+[source,bash]
+----
+podman-compose up
+----

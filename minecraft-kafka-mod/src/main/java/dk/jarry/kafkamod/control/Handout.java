@@ -23,7 +23,7 @@ public class Handout {
     // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static void _dropTnTByPlayer(Player player, int num) {
+    public static void dropTnTByPlayer(Player player, int num) {
         KafkaModPlayer kafkaModPlayer = new KafkaModPlayer(player);
 
         if (num < 1) {

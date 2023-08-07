@@ -1,6 +1,6 @@
-= Use Kafka and Quarkus to track players in Minecraft
+= Use Apache Kafka and Quarkus to track players in Minecraft
 
-This project is created to show how to track events including players movement in Minecraft via Kafka and Quarkus.
+This project is created to show how to track events including players movement in Minecraft via Apache Kafka and Quarkus.
 
 .Full flow (Minecraft client, Minecraft server via Kafka and Quarkus to the browser)
 
@@ -20,27 +20,135 @@ Inspiration: https://github.com/holly-cummins/quarkus-minecraft-observability-ex
 
 == Requeriments
 
-- https://kafka.apache.org[Kafka]
+- https://kafka.apache.org[Apache Kafka]
 - https://files.minecraftforge.net/net/minecraftforge/forge/[Minecraft Forge]
 
 == Minecraft Kafka mod
 
-Minecraft Kafka mod use Apache Kafka to send event about
+The `link:minecraft-kafka-mod/[kafkamod]` mod will connect to one or more Apache Kafka brokers on startup. It will create the topics if needed with configuration from `server.properties`.
+
+.kafkamod setting in server.properties
+- kafka-mod-player-event-enable         | default: true
+- kafka-mod-entity-event-enable         | default: true
+- kafka-mod-server-chat-event-enable    | default: true
+- kafka-mod-topic-num-partitions        | default: 1
+- kafka-mod-topic-replication-factor    | default: 1
+- kafka-mod-kakfa-brokers               | default: localhost:9092
+
+WARNING: Security - we need to have something left on the ToDo list
+
+The `link:minecraft-kafka-mod/[kafkamod]` mod use Apache Kafka to send event about
 
 - Chat
-- Entities entring or leaving the world
+- Entities entering or leaving the world
 - Entities crafted or picked up by a player
 
-Jump to link:minecraft-kafka-mod/[code]
+.Events we react to is
 
-== Quarkus Kafka
+- PlayerEvent.PlayerLoggedInEvent           -> Apache Kafka
+- PlayerEvent.PlayerLoggedOutEvent          -> Apache Kafka
+- PlayerEvent.PlayerChangedDimensionEvent   -> All Players - client message
+- PlayerEvent.PlayerRespawnEvent            -> All Players - client message
+- PlayerEvent.ItemCraftedEvent              -> Apache Kafka
+- PlayerEvent.ItemPickupEvent               -> Apache Kafka
+- net.minecraftforge.event.ServerChatEvent  -> Apache Kafka
+- EntityJoinLevelEvent                      -> Apache Kafka
+- EntityLeaveLevelEvent                     -> Apache Kafka
 
-Jump to link:quarkus-kafka/[code]
-
-The class `ItemStackProcessor` gets records from Kafka, extract the player and send it to `players`.
 
 [source,java]
 ----
+@SubscribeEvent
+public void onEntityJoinLevelEvent(EntityJoinLevelEvent event) {
+    EntityRecord entityRecord = new EntityRecord(event);
+    String key = entityRecord.getName();
+    KafkaMod.addRecordToTopic(key, entityRecord.toJsonNode(),
+        KafkaProperties.KAFKA_MOD_ENTITY_EVENT);
+    LOGGER.debug(entityRecord.toString());
+}
+----
+
+WARNING: The methode `addRecordToTopic` will get one record at a time and send it to `Apache Kafka` - we need to have something left on the ToDo list
+
+[source,java]
+----
+public static void addRecordToTopic(String key, JsonNode record, String topic) {
+    LOGGER.debug("Producing record: %s\t%s%n", key, record);
+
+    getProducer().ifPresent(
+        producer -> {
+            producer.send(new ProducerRecord<String, JsonNode>(topic, key, record),
+                new Callback() {
+                    @Override
+                    public void onCompletion(RecordMetadata m, Exception e) {
+                        if (e != null) {
+                            e.printStackTrace();
+                        } else {
+                            LOGGER.debug(
+                                    "Produced record to topic %s partition [%d] @ offset %d%n",
+                                    m.topic(),
+                                    m.partition(),
+                                    m.offset());
+                        }
+                    }
+                }
+            );
+        });
+}
+----
+
+All entities is able to map to `JsonNode` like
+
+[source,java]
+----
+public JsonNode toJsonNode() {
+    return KafkaMod.objectMapper.valueToTree(this);
+}
+----
+
+=== Build and package
+
+Buildin the `link:minecraft-kafka-mod/[kafkamod]` mod is done with
+
+[source,bash]
+----
+cd minecraft-kafka-mod
+./gradlew build
+----
+
+Package the `link:minecraft-kafka-mod/[kafkamod]` mod is done with the use of `shadowJar` in `build.gradle`
+----
+The gradle build use `shadowJar` to inlude all dependencies into our `kafka-0.3.jar` file.
+Included is `org.apache.kafka:kafka-clients:3.5.0` and `com.fasterxml.jackson.core:jackson-databind:2.15.2`.
+----
+
+An alternative to use `shadowJar` is to add the dependencies (five jar-files) manually one my one in the section `-DlegacyClassPath=` in the file
+
+    /opt/minecraft/forge/.minecraft_1.20.1-47.0.35/libraries/net/minecraftforge/forge/1.20.1-47.0.35/unix_args.txt
+
+== Quarkus Kafka
+
+The app `link:quarkus-kafka/[quarkus-kafka]` is created to display the data we write/read to/from Apache Kafka in a nice human readable way.
+
+=== ItemStackProcessor
+
+.Subset of configuration needed to get data from Apache Kafka
+----
+# Location of a Kafka broker (default is localhost:9092)
+kafka.bootstrap.servers=broker1.jarry.dk:9092
+
+# Configure the incoming `kafka-mod-item-stack` Kafka topic
+mp.messaging.incoming.kafka-mod-item-stack.topic=kafka-mod-item-stack
+mp.messaging.incoming.kafka-mod-item-stack.auto.offset.reset=earliest
+----
+
+The class `ItemStackProcessor` gets records from Apache Kafka, extract the player and send it to `players`.
+
+[source,java]
+----
+import org.eclipse.microprofile.reactive.messaging.Incoming;
+import org.eclipse.microprofile.reactive.messaging.Outgoing;
+
 @Incoming("item-stack")
 @Outgoing("players")
 public Player process(String itemStack) throws InterruptedException {
@@ -56,19 +164,53 @@ public Player process(String itemStack) throws InterruptedException {
 }
 ----
 
-The class `PlayerResource` expose a `text/event-stream` endpoint for all updates to `players`.
+NOTE: We do not need to know if the outgoing `players` is internal or external - in this case it is an internal.
 
-Starting the app we are now able to use http://localhost:8081/players.html if in `dev` mode to see updates to players.
+=== PlayerResource
+
+The class `PlayerResource` pick up the `Player` and expose it as a `text/event-stream` endpoint for all updates to `players`.
+
+[source,java]
+----
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import io.smallrye.mutiny.Multi;
+
+@Path("/players")
+public class PlayerResource {
+
+    @Channel("players")
+    Multi<Player> players;
+
+    @GET
+    @Produces(MediaType.SERVER_SENT_EVENTS)
+    public Multi<Player> stream() {
+        return players;
+    }
+
+}
+----
+
+Starting the app we are now able to use http://localhost:8080/players.html if in `dev` mode to see updates to players.
 
 image::images/show_player_in_browser.png[]
 
 == Kafka tasks
 
+Two options
+
+    - Start `Apache Kafka` via Podman -> goto link:containers[containers]
+    - Start `Apache Kafka` via the following steeps
+
+.Install Kafka
+Follow the https://kafka.apache.org/quickstart[Apache Kafka Quarickstart] to install the `zookeeper` and the `server`.
+
+Do the steeps in the folder `/opt/apache/kafka` and you will have `Apache Kafka` installation in the folder `/opt/apache/kafka/kafka_2.13-3.5`
+
 .Export KAFKA_HOME
 
 [source,bash]
 ----
-export KAFKA_HOME=/opt/apache/kafka/kafka_2.13-3.5.0
+export KAFKA_HOME=/opt/apache/kafka/kafka_2.13-3.5
 ----
 
 .Start Zookeeper

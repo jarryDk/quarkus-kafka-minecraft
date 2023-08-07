@@ -131,9 +131,12 @@ public class KafkaMod {
     private void createTopic(final String topic) {
         LOGGER.info("Creating topic if needed - {} - numPartitions: {}, replicationFactor: {}", //
                 topic, kafkaModConfig.getTopicNumPartitions(), kafkaModConfig.getTopicReplicationFactor());
+
         Optional<Integer> numPartitions = Optional.of(kafkaModConfig.getTopicNumPartitions()); // Default is 1
         Optional<Short> replicationFactor = Optional.of(kafkaModConfig.getTopicReplicationFactor()); // Default is 1
+
         final NewTopic newTopic = new NewTopic(topic, numPartitions, replicationFactor);
+
         try (final AdminClient adminClient = AdminClient.create(kafkaProperties)) {
             adminClient.createTopics(Collections.singletonList(newTopic)).all().get();
         } catch (final InterruptedException | ExecutionException e) {

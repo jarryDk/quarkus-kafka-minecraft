@@ -83,7 +83,7 @@ public class PlayerEventSubscriber {
         });
 
         // If you like some fun when respawn !!!
-        // KafkaMod.dropTnTByPlayer(player, 3);
+        // Handout.dropTnTByPlayer(player, 3);
 
     }
 

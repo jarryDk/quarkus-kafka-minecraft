@@ -15,7 +15,7 @@ public class EntityRecord extends Location {
     Entity entity;
     EntityEvent event;
 
-    public EntityRecord(EntityEvent event ){
+    public EntityRecord(EntityEvent event){
         super(event.getEntity().getX(), event.getEntity().getY(), event.getEntity().getZ());
         this.event = event;
         this.entity = event.getEntity();

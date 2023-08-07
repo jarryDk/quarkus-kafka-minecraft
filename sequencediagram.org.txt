@@ -4,6 +4,8 @@ Minecraft client->Minecraft server:Connect to server
 
 Minecraft client->Minecraft server:Play game
 
+participant minecraft-kafka-mod#00f100
+
 Minecraft server->minecraft-kafka-mod:Events
 
 minecraft-kafka-mod->Kafka:Chat event
@@ -15,6 +17,8 @@ minecraft-kafka-mod->Kafka:Entity Event
 minecraft-kafka-mod-->>Minecraft client:Player respawn - sendt to all players
 
 minecraft-kafka-mod-->>Minecraft client:Player changed dimension - sendt to all players
+
+participant quarkus-kafka#00f100
 
 Kafka->>quarkus-kafka:Item-Stack Event
 
