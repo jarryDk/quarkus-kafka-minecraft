@@ -398,3 +398,4 @@ Source : https://kafka.apache.org/documentation/#basic_ops_increase_replication_
 - https://www.confluent.io/blog/hands-free-kafka-replication-a-lesson-in-operational-simplicity/
 - https://kafka.apache.org/documentation/#basic_ops_increase_replication_factor
 - https://sleeplessbeastie.eu/2022/01/05/how-to-reassign-kafka-topic-partitions-and-replicas/[How to reassign Kafka topic partitions]
+- https://developer.okta.com/blog/2020/04/08/kafka-streams[Secure Kafka Streams with Quarkus and Java]

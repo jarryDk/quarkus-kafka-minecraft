@@ -30,7 +30,14 @@ public class PlayerEventTest {
                     "name" : "jarry_dk",
                     "stringUUID" : "b8b308b9-8ea9-4c57-98e2-721ae72ba0dd",
                     "typeOfEvent" : "Pickup",
-                    "timeStamp" : "timeStamp"
+                    "timeStamp" : "timeStamp",
+                    "player": {
+                        "x":15.667966305570742,
+                        "y":58.53584062504456,
+                        "z":-6.168235685710132,
+                        "ipAddress":"127.0.0.1",
+                        "name":"jarry_dk"
+                    }
                 }
                         """;
 
