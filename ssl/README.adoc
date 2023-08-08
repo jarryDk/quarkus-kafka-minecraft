@@ -1,0 +1,108 @@
+= SSL
+
+== Setup
+
+We start by setting up `KAFKA_HOME`
+
+[source,bash]
+----
+export KAFKA_HOME=/opt/apache/kafka/kafka_2.13-3.5.0
+----
+
+== Create all certificates for jarry.dk
+
+The script will after creating a new Creating CA Authority create the folloing files
+
+- /opt/apache/kafka/jarry_dk/broker1.jarry.dk.keystore.jks
+- /opt/apache/kafka/jarry_dk/broker2.jarry.dk.keystore.jks
+- /opt/apache/kafka/jarry_dk/broker3.jarry.dk.keystore.jks
+- /opt/apache/kafka/jarry_dk/kafka.server.truststore.jks
+- /opt/apache/kafka/jarry_dk/kafka.client.truststore.jks
+
+[source,bash]
+----
+./setup_jarry_dk.sh
+----
+
+link:setup_jarry_dk.sh[setup_jarry_dk.sh]
+
+NOTE: A new `CA Authority` will be create evry time the script is executed !
+
+== Test certificates
+
+[source,bash]
+----
+keytool -list -v \
+	-keystore /opt/apache/kafka/jarry_dk/broker1.jarry.dk.keystore.jks \
+	-storepass password1234
+----
+
+[source,bash]
+----
+keytool -list -v \
+	-keystore /opt/apache/kafka/jarry_dk/broker3.jarry.dk.keystore.jks \
+	-storepass password1234
+----
+
+[source,bash]
+----
+keytool -list -v \
+	-keystore /opt/apache/kafka/jarry_dk/broker3.jarry.dk.keystore.jks \
+	-storepass password1234
+----
+
+[source,bash]
+----
+keytool -list -v \
+	-keystore /opt/apache/kafka/jarry_dk/kafka.client.truststore.jks \
+	-storepass password1234
+----
+
+[source,bash]
+----
+keytool -list -v \
+	-keystore /opt/apache/kafka/jarry_dk/kafka.server.truststore.jks \
+	-storepass password1234
+----
+
+== Create tar for Kafka SSL Volume
+
+[source,bash]
+----
+tar cf kafka-ssl.tar client_certs server_certs
+----
+
+== Start servers
+
+We will have to update `listeners`, `advertised.listener` and `ssl.*` in server.properties
+
+----
+listeners=SSL://broker1.jarry.dk:9093
+advertised.listeners=SSL://broker1.jarry.dk:9093
+
+ssl.truststore.location=/opt/apache/kafka/jarry_dk/kafka.server.truststore.jks
+ssl.truststore.password=password1234
+ssl.keystore.location=/opt/apache/kafka/jarry_dk/broker1.jarry.dk.keystore.jks
+ssl.keystore.password=password1234
+ssl.client.auth=required
+----
+
+NOTE: We do not set `security.inter.broker.protocol=SSL` as we use `https://kafka.apache.org/31/generated/kafka_config.html#brokerconfigs_inter.broker.listener.name[inter.broker.listener.name]` when starting the broker.
+
+
+== Produce using SSL
+
+$KAFKA_HOME/bin/kafka-console-producer.sh \
+    --broker-list broker1.jarry.dk:9093 \
+    --topic kafka-mod-entity-event \
+    --producer.config client-ssl.properties
+
+== Consume using SSL
+
+----
+$KAFKA_HOME/bin/kafka-console-consumer.sh \
+    --bootstrap-server broker1.jarry.dk:9093 \
+    --topic kafka-mod-entity-event \
+    --consumer.config client-ssl.properties \
+    --from-beginning
+----

@@ -7,18 +7,46 @@ Layer for base images
 
 Source : https://github.com/jarryDk/containers/
 
+.Download fedora-minimal-kafka:3.5.0 from docker.io
 [source,bash]
 ----
 podman pull docker.io/jarrydk/fedora-minimal-kafka:3.5.0
 ----
 
+.Download fedora-minimal-zookeeper-kafka:3.5.0 from docker.io
 [source,bash]
 ----
 podman pull docker.io/jarrydk/fedora-minimal-zookeeper-kafka:3.5.0
+----
+
+.Create volume with ssl files (create_kafka_ssl_volume.sh)
+[source,bash]
+----
+podman volume create minecraft-kafka_kafka-ssl
+podman import minecraft-kafka_kafka-ssl ../ssl/kafka-ssl.tar.xz
 ----
 
 .Start zookeeper and tree brokers
 [source,bash]
 ----
 podman-compose up
+----
+
+.Stop zookeeper and tree brokers
+[source,bash]
+----
+podman-compose down
+----
+
+.Hard housekeeping (hard-housekeeping.sh)
+[source,bash]
+----
+podman rm minecraft-kafka_kafka-zookeeper_1
+podman rm minecraft-kafka_kafka-server-broker1_1
+podman rm minecraft-kafka_kafka-server-broker2_1
+podman rm minecraft-kafka_kafka-server-broker3_1
+
+podman volume rm minecraft-kafka_kafka-server-broker1-data
+podman volume rm minecraft-kafka_kafka-server-broker2-data
+podman volume rm minecraft-kafka_kafka-server-broker3-data
 ----
