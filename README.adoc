@@ -23,6 +23,15 @@ Inspiration: https://github.com/holly-cummins/quarkus-minecraft-observability-ex
 - https://kafka.apache.org[Apache Kafka]
 - https://files.minecraftforge.net/net/minecraftforge/forge/[Minecraft Forge]
 
+Change to `/etc/hosts` is needed.
+----
+127.0.2.10	kafka-zookeeper.jarry.dk
+127.0.2.21	broker1.jarry.dk
+127.0.2.22	broker2.jarry.dk
+127.0.2.23	broker3.jarry.dk
+127.0.2.30	broker10.jarry.dk
+----
+
 == Minecraft Kafka mod
 
 The `link:minecraft-kafka-mod/[kafkamod]` mod will connect to one or more Apache Kafka brokers on startup. It will create the topics if needed with configuration from `server.properties`.
@@ -131,8 +140,6 @@ I use link:minecraft-kafka-mod/build_and_deploy.sh[minecraft-kafka-mod/build_and
 script build the binary and deploy to the folder `$FORGE_SERVER_LOCATION/mods/kafka-1.0.1.jar` - no housekeep when
 doing a bump of version.
 
-
-
 == Quarkus Kafka
 
 The app `link:quarkus-kafka/[quarkus-kafka]` is created to display the data we write/read to/from Apache Kafka in a nice human readable way.
@@ -203,7 +210,7 @@ image::images/show_player_in_browser.png[]
 
 == Kafka tasks
 
-Two options
+Two options to get `Apache Kafka` up running
 
     - Start `Apache Kafka` via Podman -> goto link:containers[containers]
     - Start `Apache Kafka` via the following steeps
@@ -242,7 +249,7 @@ TIP: Add ` | jq` to get the json from the topic in a nice format. How to install
 $KAFKA_HOME/bin/kafka-console-consumer.sh \
     --bootstrap-server localhost:9092 \
     --topic kafka-mod-chat \
-    --from-beginning
+    --from-beginning | jq
 ----
 
 .Consume the kafka-mod-item-stack topic
@@ -251,7 +258,7 @@ $KAFKA_HOME/bin/kafka-console-consumer.sh \
 $KAFKA_HOME/bin/kafka-console-consumer.sh \
     --bootstrap-server localhost:9092 \
     --topic kafka-mod-item-stack \
-    --from-beginning
+    --from-beginning | jq
 ----
 
 .Consume the kafka-mod-entity-event topic
@@ -260,7 +267,7 @@ $KAFKA_HOME/bin/kafka-console-consumer.sh \
 $KAFKA_HOME/bin/kafka-console-consumer.sh \
     --bootstrap-server localhost:9092 \
     --topic kafka-mod-entity-event \
-    --from-beginning
+    --from-beginning | jq
 ----
 
 .Consume the kafka-mod-player-event topic
@@ -269,7 +276,7 @@ $KAFKA_HOME/bin/kafka-console-consumer.sh \
 $KAFKA_HOME/bin/kafka-console-consumer.sh \
     --bootstrap-server localhost:9092 \
     --topic kafka-mod-player-event \
-    --from-beginning
+    --from-beginning | jq
 ----
 
 .Create the topic kafka-mod-entity-event (if needed)
