@@ -17,6 +17,14 @@ podman pull docker.io/jarrydk/fedora-minimal-kafka:3.5.0
 podman pull docker.io/jarrydk/fedora-minimal-zookeeper-kafka:3.5.0
 ----
 
+.Create
+[source,bash]
+----
+cd ssl
+podman volume create minecraft-kafka_kafka-ssl
+podman import minecraft-kafka_kafka-ssl kafka-ssl.tar.xz
+----
+
 .Start zookeeper and tree brokers
 [source,bash]
 ----

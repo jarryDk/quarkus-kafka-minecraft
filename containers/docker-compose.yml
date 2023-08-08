@@ -18,19 +18,26 @@ services:
           - kafka-zookeeper.local
 
   kafka-server-broker1:
-    image: docker.io/jarrydk/fedora-minimal-kafka:3.5.0
+    image: docker.io/jarrydk/fedora-minimal-kafka:3.5.0-v2
     environment:
       KAFKA_ZOOKEEPER_CONNECT: "kafka-zookeeper:2181"
-      KAFKA_LISTENERS: "PLAINTEXT://:9092,INTERNAL_PLAINTEXT://:9094"
+      KAFKA_LISTENERS: "PLAINTEXT://:9092,SSL://:9093,INTERNAL_PLAINTEXT://:9094"
       KAFKA_LISTENER_SECURITY_PROTOCAL_MAP: "PLAINTEXT:PLAINTEXT,INTERNAL_PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL"
       KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL_PLAINTEXT"
-      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://broker1.jarry.dk:9092,INTERNAL_PLAINTEXT://:9094"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://broker1.jarry.dk:9092,SSL://broker1.jarry.dk:9093,INTERNAL_PLAINTEXT://:9094"
+      KAFKA_SSL_TRUSTSTORE_LOCATION: "/var/kafka/certs/server_certs/kafka.server.truststore.jks"
+      KAFKA_SSL_TRUSTSTORE_PASSWORD: "password1234"
+      KAFKA_SSL_KEYSTORE_LOCATION: "/var/kafka/certs/server_certs/broker1.jarry.dk.keystore.jks"
+      KAFKA_SSL_KEYSTORE_PASSWORD: "password1234"
+      KAFKA_SSL_CLIENT_AUTH: "requested"
       KAFKA_BROKER_ID: 1
       KAFKA_LOG_DIRS: /var/kafka/data
     ports:
       - "127.0.2.21:9092:9092"
+      - "127.0.2.21:9093:9093"
     volumes:
       - kafka-server-broker1-data:/var/kafka/data
+      - kafka-ssl:/var/kafka/certs
     networks:
       default:
         aliases:
@@ -39,19 +46,26 @@ services:
       - kafka-zookeeper
 
   kafka-server-broker2:
-    image: docker.io/jarrydk/fedora-minimal-kafka:3.5.0
+    image: docker.io/jarrydk/fedora-minimal-kafka:3.5.0-v2
     environment:
       KAFKA_ZOOKEEPER_CONNECT: "kafka-zookeeper:2181"
-      KAFKA_LISTENERS: "PLAINTEXT://:9092,INTERNAL_PLAINTEXT://:9094"
+      KAFKA_LISTENERS: "PLAINTEXT://:9092,SSL://:9093,INTERNAL_PLAINTEXT://:9094"
       KAFKA_LISTENER_SECURITY_PROTOCAL_MAP: "PLAINTEXT:PLAINTEXT,INTERNAL_PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL"
       KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL_PLAINTEXT"
-      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://broker2.jarry.dk:9092,INTERNAL_PLAINTEXT://:9094"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://broker2.jarry.dk:9092,SSL://broker2.jarry.dk:9093,INTERNAL_PLAINTEXT://:9094"
+      KAFKA_SSL_TRUSTSTORE_LOCATION: "/var/kafka/certs/server_certs/kafka.server.truststore.jks"
+      KAFKA_SSL_TRUSTSTORE_PASSWORD: "password1234"
+      KAFKA_SSL_KEYSTORE_LOCATION: "/var/kafka/certs/server_certs/broker2.jarry.dk.keystore.jks"
+      KAFKA_SSL_KEYSTORE_PASSWORD: "password1234"
+      KAFKA_SSL_CLIENT_AUTH: "requested"
       KAFKA_BROKER_ID: 2
       KAFKA_LOG_DIRS: /var/kafka/data
     ports:
       - "127.0.2.22:9092:9092"
+      - "127.0.2.22:9093:9093"
     volumes:
       - kafka-server-broker2-data:/var/kafka/data
+      - kafka-ssl:/var/kafka/certs
     networks:
       default:
         aliases:
@@ -60,25 +74,32 @@ services:
       - kafka-zookeeper
 
   kafka-server-broker3:
-    image: docker.io/jarrydk/fedora-minimal-kafka:3.5.0
+    image: docker.io/jarrydk/fedora-minimal-kafka:3.5.0-v2
     environment:
       KAFKA_ZOOKEEPER_CONNECT: "kafka-zookeeper:2181"
-      KAFKA_LISTENERS: "PLAINTEXT://:9092,INTERNAL_PLAINTEXT://:9094"
+      KAFKA_LISTENERS: "PLAINTEXT://:9092,SSL://:9093,INTERNAL_PLAINTEXT://:9094"
       KAFKA_LISTENER_SECURITY_PROTOCAL_MAP: "PLAINTEXT:PLAINTEXT,INTERNAL_PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL"
       KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL_PLAINTEXT"
-      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://broker3.jarry.dk:9092,INTERNAL_PLAINTEXT://:9094"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://broker3.jarry.dk:9092,SSL://broker3.jarry.dk:9093,INTERNAL_PLAINTEXT://:9094"
+      KAFKA_SSL_TRUSTSTORE_LOCATION: "/var/kafka/certs/server_certs/kafka.server.truststore.jks"
+      KAFKA_SSL_TRUSTSTORE_PASSWORD: "password1234"
+      KAFKA_SSL_KEYSTORE_LOCATION: "/var/kafka/certs/server_certs/broker3.jarry.dk.keystore.jks"
+      KAFKA_SSL_KEYSTORE_PASSWORD: "password1234"
+      KAFKA_SSL_CLIENT_AUTH: "requested"
       KAFKA_BROKER_ID: 3
       KAFKA_LOG_DIRS: /var/kafka/data
     ports:
       - "127.0.2.23:9092:9092"
+      - "127.0.2.23:9093:9093"
     volumes:
       - kafka-server-broker3-data:/var/kafka/data
+      - kafka-ssl:/var/kafka/certs
     networks:
       default:
         aliases:
           - kafka-server-broker3.local
     depends_on:
-      - kafka-zookeeper
+      - kafka-zookeeperls
 
 networks:
  default:
@@ -86,6 +107,7 @@ networks:
 
 volumes:
   kafka-zookeeper-data:
+  kafka-ssl:
   kafka-server-broker1-data:
   kafka-server-broker2-data:
   kafka-server-broker3-data:
