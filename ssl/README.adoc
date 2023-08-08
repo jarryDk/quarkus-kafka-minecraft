@@ -65,6 +65,13 @@ keytool -list -v \
 	-storepass password1234
 ----
 
+== Create tar for Kafka SSL Volume
+
+[source,bash]
+----
+tar cf kafka-ssl.tar client_certs server_certs
+----
+
 == Start servers
 
 We will have to update `listeners`, `advertised.listener` and `ssl.*` in server.properties
@@ -81,7 +88,6 @@ ssl.client.auth=required
 ----
 
 NOTE: We do not set `security.inter.broker.protocol=SSL` as we use `https://kafka.apache.org/31/generated/kafka_config.html#brokerconfigs_inter.broker.listener.name[inter.broker.listener.name]` when starting the broker.
-
 
 
 == Produce using SSL
