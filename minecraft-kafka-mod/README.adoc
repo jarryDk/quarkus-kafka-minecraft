@@ -13,7 +13,7 @@ This mod use Apache Kafka to send events about
 
 .MinecraftForge version
 ----
-1.20.1-47.0.35
+1.20.1-47.1.43
 ----
 
 .Kafka version this mod is using
@@ -35,7 +35,7 @@ Included is `org.apache.kafka:kafka-clients:3.5.0` and `com.fasterxml.jackson.co
 [source,bash]
 ----
 #!/bin/bash
-FORGE_SERVER_VERSION=${VERSION_MINECRAFT_FORGE_SERVER:=1.20.1-47.0.35}
+FORGE_SERVER_VERSION=${VERSION_MINECRAFT_FORGE_SERVER:=1.20.1-47.1.43}
 FORGE_SERVER_LOCATION="/opt/minecraft/forge/.minecraft_$FORGE_SERVER_VERSION"
 FORGE_MOD_FOLDER="$FORGE_SERVER_LOCATION/mods"
 if [ ! -d $FORGE_MOD_FOLDER ]; then
