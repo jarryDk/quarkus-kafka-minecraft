@@ -7,6 +7,13 @@ Layer for base images
 
 Source : https://github.com/jarryDk/containers/
 
+Change to `/etc/hosts` is needed - `podman-compose`.
+----
+127.0.2.21	broker1.jarry.dk
+127.0.2.22	broker2.jarry.dk
+127.0.2.23	broker3.jarry.dk
+----
+
 .Download fedora-minimal-kafka:3.5.0 from docker.io
 [source,bash]
 ----

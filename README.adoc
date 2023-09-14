@@ -18,19 +18,17 @@ TIP: Start Kafka before starting the Minecraft server.
 
 Inspiration: https://github.com/holly-cummins/quarkus-minecraft-observability-extension
 
+Spinning up the web-app http://localhost:8080[Use Kafka to track players in MineCraft]
+
 == Requeriments
 
 - https://kafka.apache.org[Apache Kafka]
 - https://files.minecraftforge.net/net/minecraftforge/forge/[Minecraft Forge]
 
-Change to `/etc/hosts` is needed.
-----
-127.0.2.10	kafka-zookeeper.jarry.dk
-127.0.2.21	broker1.jarry.dk
-127.0.2.22	broker2.jarry.dk
-127.0.2.23	broker3.jarry.dk
-127.0.2.30	broker10.jarry.dk
-----
+.Getting er servers up running
+- link:kafka/README.adoc[Get Kafka up running]
+- link:minecraft/README.adoc[Get Minecraft up running]
+
 
 == Minecraft Kafka mod
 
@@ -42,15 +40,16 @@ The `link:minecraft-kafka-mod/[kafkamod]` mod will connect to one or more Apache
 - kafka-mod-server-chat-event-enable    | default: true
 - kafka-mod-topic-num-partitions        | default: 1
 - kafka-mod-topic-replication-factor    | default: 1
-- kafka-mod-kakfa-brokers               | default: localhost:9092
+- kafka-mod-kafka-brokers               | default: localhost:9092
 
-WARNING: Security - we need to have something left on the ToDo list
+WARNING: Security - we conect via `PLAINTEXT`
 
 The `link:minecraft-kafka-mod/[kafkamod]` mod use Apache Kafka to send event about
 
 - Chat
 - Entities entering or leaving the world
 - Entities crafted or picked up by a player
+- Player
 
 .Events we react to is
 
@@ -71,9 +70,10 @@ The `link:minecraft-kafka-mod/[kafkamod]` mod use Apache Kafka to send event abo
 public void onEntityJoinLevelEvent(EntityJoinLevelEvent event) {
     EntityRecord entityRecord = new EntityRecord(event);
     String key = entityRecord.getName();
-    KafkaMod.addRecordToTopic(key, entityRecord.toJsonNode(),
+    KafkaMod.addRecordToTopic(
+        key,
+        entityRecord.toJsonNode(),
         KafkaProperties.KAFKA_MOD_ENTITY_EVENT);
-    LOGGER.debug(entityRecord.toString());
 }
 ----
 
@@ -149,7 +149,7 @@ The app `link:quarkus-kafka/[quarkus-kafka]` is created to display the data we w
 .Subset of configuration needed to get data from Apache Kafka
 ----
 # Location of a Kafka broker (default is localhost:9092)
-kafka.bootstrap.servers=broker1.jarry.dk:9092
+kafka.bootstrap.servers=broker1.jarry.dk:9192
 
 # Configure the incoming `kafka-mod-item-stack` Kafka topic
 mp.messaging.incoming.kafka-mod-item-stack.topic=kafka-mod-item-stack

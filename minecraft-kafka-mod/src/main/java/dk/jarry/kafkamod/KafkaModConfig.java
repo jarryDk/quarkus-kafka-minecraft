@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.Set;
 
 import org.slf4j.Logger;
 
@@ -22,7 +21,7 @@ public class KafkaModConfig {
     private static final String KAFKA_MOD_TOPIC_NUM_PARTITIONS = "kafka-mod-topic-num-partitions";
     private static final String KAFKA_MOD_TOPIC_REPLICATION_FACTOR = "kafka-mod-topic-replication-factor";
 
-    private static final String KAFKA_MOD_KAFKA_BROKERS = "kafka-mod-kakfa-brokers";
+    private static final String KAFKA_MOD_KAFKA_BROKERS = "kafka-mod-kafka-brokers";
 
     private Properties serverProperties = new Properties();
 

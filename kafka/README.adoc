@@ -1,0 +1,76 @@
+= Get Kafka up running
+
+Change to `/etc/hosts` is needed - `sh`.
+----
+127.0.0.1	broker1.jarry.dk    # broker ports 9192, 9193
+127.0.0.1	broker2.jarry.dk    # broker ports 9292, 9293
+127.0.0.1	broker3.jarry.dk    # broker ports 9392, 9393
+----
+
+.Export KAFKA_HOME
+[source,bash]
+----
+export KAFKA_HOME=/opt/apache/kafka/kafka_2.13-3.5
+----
+
+.Start zookeeper.jarry.dk
+[source,bash]
+----
+$KAFKA_HOME/bin/zookeeper-server-start.sh \
+    $KAFKA_HOME/config/zookeeper.properties
+----
+
+.Start broker1.jarry.dk
+[source,bash]
+----
+$KAFKA_HOME/bin/kafka-server-start.sh \
+	$KAFKA_HOME/config/server.properties \
+	--override zookeeper.connect=zookeeper.jarry.dk:2181 \
+    --override listeners=PLAINTEXT://:9192,SSL://:9193,INTERNAL_PLAINTEXT://:9194 \
+    --override listener.security.protocol.map=PLAINTEXT:PLAINTEXT,INTERNAL_PLAINTEXT:PLAINTEXT,SSL:SSL,SASL_PLAINTEXT:SASL_PLAINTEXT,SASL_SSL:SASL_SSL \
+    --override inter.broker.listener.name=INTERNAL_PLAINTEXT \
+	--override ssl.truststore.location=/opt/apache/kafka/jarry_dk/kafka.server.truststore.jks \
+	--override ssl.truststore.password=password1234 \
+    --override ssl.keystore.location=/opt/apache/kafka/jarry_dk/broker1.jarry.dk.keystore.jks \
+	--override ssl.keystore.password=password1234 \
+    --override ssl.client.auth=requested \
+    --override advertised.listeners=PLAINTEXT://broker1.jarry.dk:9192,SSL://broker1.jarry.dk:9193,INTERNAL_PLAINTEXT://broker1.jarry.dk:9194 \
+    --override broker.id=1 \
+    --override log.dirs=/tmp/kafka-logs-broker-1
+----
+
+.Consume the kafka-mod-item-stack topic
+[source,bash]
+----
+$KAFKA_HOME/bin/kafka-console-consumer.sh \
+    --bootstrap-server broker1.jarry.dk:9192 \
+    --topic kafka-mod-item-stack \
+    --from-beginning | jq
+----
+
+.Consume the kafka-mod-entity-event topic
+[source,bash]
+----
+$KAFKA_HOME/bin/kafka-console-consumer.sh \
+    --bootstrap-server broker1.jarry.dk:9192 \
+    --topic kafka-mod-entity-event \
+    --from-beginning | jq
+----
+
+.Consume the kafka-mod-player-event topic
+[source,bash]
+----
+$KAFKA_HOME/bin/kafka-console-consumer.sh \
+    --bootstrap-server broker1.jarry.dk:9192 \
+    --topic kafka-mod-player-event \
+    --from-beginning | jq
+----
+
+.Consume the kafka-mod-chat topic
+[source,bash]
+----
+$KAFKA_HOME/bin/kafka-console-consumer.sh \
+    --bootstrap-server broker1.jarry.dk:9192 \
+    --topic kafka-mod-chat \
+    --from-beginning | jq
+----

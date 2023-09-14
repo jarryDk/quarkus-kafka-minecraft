@@ -1,0 +1,18 @@
+= Get Minecraft up running
+
+
+[source,bash]
+----
+cd /opt/minecraft/forge/.minecraft_1.20.1-47.1.43
+./run.sh
+----
+
+Minecraft Kafka mod config in `server.properties`
+----
+kafka-mod-player-event-enable=true
+kafka-mod-entity-event-enable=true
+kafka-mod-server-chat-event-enable=true
+kafka-mod-topic-num-partitions=1
+kafka-mod-topic-replication-factor=1
+kafka-mod-kafka-brokers=broker1.jarry.dk:9192
+----
