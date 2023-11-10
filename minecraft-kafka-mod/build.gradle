@@ -6,17 +6,17 @@ plugins {
     id 'java'
 }
 
-version = '1.0.1'
+version = '1.0.2'
 group = 'dk.jarry.minecraft'
 archivesBaseName = 'kafka'
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 
 minecraft {
-    mappings channel: 'official', version: '1.20.1'
+    mappings channel: 'official', version: '1.20.2'
 
     runs {
         server {
@@ -45,13 +45,13 @@ configurations {
 
 dependencies {
 
-    minecraft 'net.minecraftforge:forge:1.20.1-47.1.43'
+    minecraft 'net.minecraftforge:forge:1.20.2-48.0.35'
 
-    implementation 'org.apache.kafka:kafka-clients:3.5.0'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    implementation 'org.apache.kafka:kafka-clients:3.6.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.3'
 
-    shade 'org.apache.kafka:kafka-clients:3.5.0'
-    shade 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    shade 'org.apache.kafka:kafka-clients:3.6.0'
+    shade 'com.fasterxml.jackson.core:jackson-databind:2.15.3'
 
 }
 
