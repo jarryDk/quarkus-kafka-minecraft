@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FORGE_SERVER_VERSION=${VERSION_MINECRAFT_FORGE_SERVER:=1.20.2-48.0.35}
+FORGE_SERVER_VERSION=${VERSION_MINECRAFT_FORGE_SERVER:=1.20.4-49.0.11}
 FORGE_SERVER_LOCATION="/opt/minecraft/forge/.minecraft_$FORGE_SERVER_VERSION"
 
 FORGE_MOD_FOLDER="$FORGE_SERVER_LOCATION/mods"
@@ -12,4 +12,4 @@ else
     echo "Forge folder was present -> $FORGE_MOD_FOLDER"
 fi
 
-cp -v build/libs/kafka-1.0.2.jar $FORGE_MOD_FOLDER/kafka-1.0.2.jar
+cp -v build/libs/kafka-1.0.3.jar $FORGE_MOD_FOLDER/kafka-1.0.3.jar
