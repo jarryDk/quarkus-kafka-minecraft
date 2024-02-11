@@ -127,17 +127,17 @@ cd minecraft-kafka-mod
 
 Package the `link:minecraft-kafka-mod/[kafkamod]` mod is done with the use of `shadowJar` in `build.gradle`
 ----
-The gradle build use `shadowJar` to inlude all dependencies into our `kafka-1.0.1.jar` file.
-Included is `org.apache.kafka:kafka-clients:3.5.0` and `com.fasterxml.jackson.core:jackson-databind:2.15.2`.
+The gradle build use `shadowJar` to inlude all dependencies into our `kafka-1.0.4.jar` file.
+Included is `org.apache.kafka:kafka-clients:3.6.1` and `com.fasterxml.jackson.core:jackson-databind:2.16.0`.
 ----
 
 An alternative to use `shadowJar` is to add the dependencies (five jar-files) manually one my one in the section `-DlegacyClassPath=` in the file
 
-    /opt/minecraft/forge/.minecraft_1.20.1-47.0.35/libraries/net/minecraftforge/forge/1.20.1-47.0.35/unix_args.txt
+    /opt/minecraft/forge/.minecraft_1.20.4-49.0.11/libraries/net/minecraftforge/forge/1.20.4-49.0.11/unix_args.txt
 
 
 I use link:minecraft-kafka-mod/build_and_deploy.sh[minecraft-kafka-mod/build_and_deploy.sh] to deploy `minecraftforge`. The
-script build the binary and deploy to the folder `$FORGE_SERVER_LOCATION/mods/kafka-1.0.1.jar` - no housekeep when
+script build the binary and deploy to the folder `$FORGE_SERVER_LOCATION/mods/kafka-1.0.4.jar` - no housekeep when
 doing a bump of version.
 
 == Quarkus Kafka
@@ -259,13 +259,13 @@ $KAFKA_HOME/bin/kafka-server-start.sh \
 .Install Kafka
 Follow the https://kafka.apache.org/quickstart[Apache Kafka Quarickstart] to install the `zookeeper` and the `server`.
 
-Do the steeps in the folder `/opt/apache/kafka` and you will have `Apache Kafka` installation in the folder `/opt/apache/kafka/kafka_2.13-3.5`
+Do the steeps in the folder `/opt/apache/kafka` and you will have `Apache Kafka` installation in the folder `/opt/apache/kafka/kafka_2.13-3.6.1`
 
 .Export KAFKA_HOME
 
 [source,bash]
 ----
-export KAFKA_HOME=/opt/apache/kafka/kafka_2.13-3.5
+export KAFKA_HOME=/opt/apache/kafka/kafka_2.13-3.6.1
 ----
 
 .Start Zookeeper
