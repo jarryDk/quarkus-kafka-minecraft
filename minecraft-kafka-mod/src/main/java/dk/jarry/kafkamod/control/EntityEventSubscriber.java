@@ -6,7 +6,7 @@ import com.mojang.logging.LogUtils;
 
 import dk.jarry.kafkamod.KafkaMod;
 import dk.jarry.kafkamod.KafkaProperties;
-import dk.jarry.kafkamod.entity.EntityRecord;
+import dk.jarry.kafkamod.entity.EntityEventRecord;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
@@ -29,17 +29,17 @@ public class EntityEventSubscriber {
 
     @SubscribeEvent
     public void onEntityJoinLevelEvent(EntityJoinLevelEvent event) {
-        EntityRecord entityRecord = new EntityRecord(event);
-        String key = entityRecord.getName();
-        KafkaMod.addRecordToTopic(key, entityRecord.toJsonNode(), KafkaProperties.KAFKA_MOD_ENTITY_EVENT);
-        LOGGER.debug(entityRecord.toString());
+        EntityEventRecord entityEventRecord = new EntityEventRecord(event);
+        String key = entityEventRecord.getName();
+        KafkaMod.addRecordToTopic(key, entityEventRecord.toJsonNode(), KafkaProperties.KAFKA_MOD_ENTITY_EVENT);
+        LOGGER.debug(entityEventRecord.toString());
     }
 
     @SubscribeEvent
     public void onEntityLeaveLevelEvent(EntityLeaveLevelEvent event) {
-        EntityRecord entityRecord = new EntityRecord(event);
-        String key = entityRecord.getName();
-        KafkaMod.addRecordToTopic(key, entityRecord.toJsonNode(), KafkaProperties.KAFKA_MOD_ENTITY_EVENT);
-        LOGGER.debug(entityRecord.toString());
+        EntityEventRecord entityEventRecord = new EntityEventRecord(event);
+        String key = entityEventRecord.getName();
+        KafkaMod.addRecordToTopic(key, entityEventRecord.toJsonNode(), KafkaProperties.KAFKA_MOD_ENTITY_EVENT);
+        LOGGER.debug(entityEventRecord.toString());
     }
 }

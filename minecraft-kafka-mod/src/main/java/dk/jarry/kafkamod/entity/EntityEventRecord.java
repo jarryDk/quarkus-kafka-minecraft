@@ -10,12 +10,12 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 
 @JsonPropertyOrder(alphabetic = true)
-public class EntityRecord extends Location {
+public class EntityEventRecord extends Location {
 
     Entity entity;
     EntityEvent event;
 
-    public EntityRecord(EntityEvent event){
+    public EntityEventRecord(EntityEvent event){
         super(event.getEntity().getX(), event.getEntity().getY(), event.getEntity().getZ());
         this.event = event;
         this.entity = event.getEntity();
