@@ -1,5 +1,9 @@
 package dk.jarry.kafkamod.entity;
 
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraftforge.event.entity.EntityEvent;
+
 abstract class Location {
 
     double x;
@@ -10,6 +14,19 @@ abstract class Location {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    public Location(EntityEvent event) {
+        Entity entity = event.getEntity();
+        this.x = entity.getX();
+        this.y = entity.getY();
+        this.z = entity.getZ();
+    }
+
+    public Location(ServerPlayer player){
+        this.x = player.getX();
+        this.y = player.getY();
+        this.z = player.getZ();
     }
 
     public double getX() {
