@@ -110,7 +110,8 @@ public class PlayerEventSubscriber {
         KafkaModPlayer kmPlayer = new KafkaModPlayer(player);
 
         ItemStack stack = event.getStack();
-        LOGGER.info("Component Pickup : {}", //
+        LOGGER.info("Component Pickup by {}: {}", //
+                player.getName(), //
                 stack.getDisplayName().getString());
 
         ItemStackRecord cr = new ItemStackRecord(kmPlayer, "Pickup", stack);

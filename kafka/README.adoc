@@ -10,7 +10,7 @@ Change to `/etc/hosts` is needed - `sh`.
 .Export KAFKA_HOME
 [source,bash]
 ----
-export KAFKA_HOME=/opt/apache/kafka/kafka_2.13-3.5
+export KAFKA_HOME=/opt/apache/kafka/kafka_2.13-3.8
 ----
 
 .Start zookeeper.jarry.dk

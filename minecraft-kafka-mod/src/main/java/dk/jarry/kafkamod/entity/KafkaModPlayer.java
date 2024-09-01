@@ -13,7 +13,7 @@ public class KafkaModPlayer extends Location {
     Player player;
 
     public KafkaModPlayer(ServerPlayer player){
-        super(player.getX(), player.getY(), player.getZ());
+        super(player);
         this.player = player;
     }
 
