@@ -111,8 +111,8 @@ public class PlayerEventSubscriber {
 
         ItemStack stack = event.getStack();
         LOGGER.info("Component Pickup by {}: {}", //
-                player.getName(), //
-                stack.getDisplayName().getString());
+            kmPlayer.getName(), //
+            stack.getDisplayName().getString());
 
         ItemStackRecord cr = new ItemStackRecord(kmPlayer, "Pickup", stack);
         String key = kmPlayer.getName();
