@@ -6,7 +6,7 @@ plugins {
     id 'java'
 }
 
-version = '1.0.7'
+version = '1.0.8'
 group = 'dk.jarry.minecraft'
 archivesBaseName = 'kafka'
 
@@ -50,7 +50,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
 
     shade 'org.apache.kafka:kafka-clients:3.8.0'
-    shade 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
+    // shade 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
 
 }
 
