@@ -127,7 +127,7 @@ cd minecraft-kafka-mod
 
 Package the `link:minecraft-kafka-mod/[kafkamod]` mod is done with the use of `shadowJar` in `build.gradle`
 ----
-The gradle build use `shadowJar` to inlude all dependencies into our `kafka-1.0.7.jar` file.
+The gradle build use `shadowJar` to inlude all dependencies into our `kafka-1.0.8.jar` file.
 Included is `org.apache.kafka:kafka-clients:3.8.0` and `com.fasterxml.jackson.core:jackson-databind:2.17.2`.
 ----
 
@@ -137,7 +137,7 @@ An alternative to use `shadowJar` is to add the dependencies (five jar-files) ma
 
 
 I use link:minecraft-kafka-mod/build_and_deploy.sh[minecraft-kafka-mod/build_and_deploy.sh] to deploy `minecraftforge`. The
-script build the binary and deploy to the folder `$FORGE_SERVER_LOCATION/mods/kafka-1.0.7.jar` - no housekeep when
+script build the binary and deploy to the folder `$FORGE_SERVER_LOCATION/mods/kafka-1.0.8.jar` - no housekeep when
 doing a bump of version.
 
 == Quarkus Kafka

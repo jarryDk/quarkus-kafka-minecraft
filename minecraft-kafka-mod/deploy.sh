@@ -12,4 +12,4 @@ else
     echo "Forge folder was present -> $FORGE_MOD_FOLDER"
 fi
 
-cp -v build/libs/kafka-1.0.7.jar $FORGE_MOD_FOLDER/kafka-1.0.7.jar
+cp -v build/libs/kafka-1.0.8.jar $FORGE_MOD_FOLDER/kafka-1.0.8.jar
