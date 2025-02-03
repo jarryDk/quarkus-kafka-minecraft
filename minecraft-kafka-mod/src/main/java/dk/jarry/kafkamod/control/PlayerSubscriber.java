@@ -47,8 +47,8 @@ public class PlayerSubscriber {
             KafkaModPlayer kmPlayer = new KafkaModPlayer(player);
             LOGGER.info("Player is death : {}", kmPlayer);
 
-            player.sendSystemMessage(
-                Component.literal("<"+kmPlayer.getName()+"> I died - x=" + player.getX() + " y=" + player.getY() + " z=" + player.getZ()));
+            // player.sendSystemMessage(
+            //    Component.literal("<"+kmPlayer.getName()+"> I died - x=" + player.getX() + " y=" + player.getY() + " z=" + player.getZ()));
 
             KafkaMod.playerInGame.values().stream().forEach(p -> {
                 p.displayClientMessage(Component.literal("Death of player - " + player), true);

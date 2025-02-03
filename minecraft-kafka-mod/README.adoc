@@ -13,7 +13,7 @@ This mod use Apache Kafka to send events about
 
 .MinecraftForge version
 ----
-1.21.1-52.0.9
+1.21.4-54.0.26
 ----
 
 .Kafka version this mod is using
@@ -28,14 +28,14 @@ This mod use Apache Kafka to send events about
 ----
 
 .Use of shadowJar in build.gradle
-The gradle build use `shadowJar` to inlude all dependencies into our `kafka-1.0.6.jar` file.
+The gradle build use `shadowJar` to inlude all dependencies into our `kafka-1.0.7.jar` file.
 Included is `org.apache.kafka:kafka-clients:3.8.0` and `com.fasterxml.jackson.core:jackson-databind:2.17.2`.
 
 .deploy this mod
 [source,bash]
 ----
 #!/bin/bash
-FORGE_SERVER_VERSION=${VERSION_MINECRAFT_FORGE_SERVER:=1.21.1-52.0.9}
+FORGE_SERVER_VERSION=${VERSION_MINECRAFT_FORGE_SERVER:=1.21.4-54.0.26}
 FORGE_SERVER_LOCATION="/opt/minecraft/forge/.minecraft_$FORGE_SERVER_VERSION"
 FORGE_MOD_FOLDER="$FORGE_SERVER_LOCATION/mods"
 if [ ! -d $FORGE_MOD_FOLDER ]; then
@@ -44,7 +44,7 @@ if [ ! -d $FORGE_MOD_FOLDER ]; then
 else
     echo "Forge folder was present -> $FORGE_MOD_FOLDER"
 fi
-cp -v build/libs/kafka-1.0.6.jar $FORGE_MOD_FOLDER/kafka-1.0.6.jar
+cp -v build/libs/kafka-1.0.7.jar $FORGE_MOD_FOLDER/kafka-1.0.7.jar
 ----
 
 
